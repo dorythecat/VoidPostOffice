@@ -13,6 +13,20 @@ import { Application, Assets, Sprite } from "pixi.js";
     // Load the bunny texture
     const texture = await Assets.load("/assets/boxes/box_1.png");
 
+    function createStar(x, y, size, color) {
+        const star = new Sprite(texture);
+        star.tint = color;
+        star.width = size;
+        star.height = size;
+        star.position.set(x, y);
+        return star;
+    }
+
+    for (let i = 0; i < 100; i++) {
+        const star = createStar(Math.random() * app.screen.width, Math.random() * app.screen.height, Math.random() * 10 + 10, Math.random() * 0xffffff);
+        app.stage.addChild(star);
+    }
+
     // Create a box Sprite
     const box = new Sprite(texture);
     box.scale.set(3);
