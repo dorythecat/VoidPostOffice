@@ -1,4 +1,5 @@
 import { Application, Assets, Sprite } from "pixi.js";
+import { GlowFilter } from "pixi-filters";
 
 (async () => {
     // Create a new application
@@ -10,11 +11,12 @@ import { Application, Assets, Sprite } from "pixi.js";
     // Append the application canvas to the document body
     document.getElementById("pixi-container").appendChild(app.canvas);
 
-    // Load the bunny texture
-    const texture = await Assets.load("/assets/boxes/box_1.png");
+    // Load textures
+    const starTexture = await Assets.load("/assets/star.png");
+    const boxTexture = await Assets.load("/assets/boxes/box_1.png");
 
     function createStar(x, y, size, color) {
-        const star = new Sprite(texture);
+        const star = new Sprite(starTexture);
         star.tint = color;
         star.width = size;
         star.height = size;
@@ -22,13 +24,17 @@ import { Application, Assets, Sprite } from "pixi.js";
         return star;
     }
 
-    for (let i = 0; i < 100; i++) {
-        const star = createStar(Math.random() * app.screen.width, Math.random() * app.screen.height, Math.random() * 10 + 10, Math.random() * 0xffffff);
+    for (let i = 0; i < 500; i++) {
+        const star = createStar(Math.random() * app.screen.width, Math.random() * app.screen.height, Math.random() * 10, Math.random() * 0xffffff);
+        star.alpha = Math.random();
+        star.filters = [
+            new GlowFilter({ distance: 15, outerStrength: 2, color: star.tint })
+        ]
         app.stage.addChild(star);
     }
 
     // Create a box Sprite
-    const box = new Sprite(texture);
+    const box = new Sprite(boxTexture);
     box.scale.set(3);
     box.cursor = "pointer";
     box.eventMode = "static";
@@ -70,6 +76,6 @@ import { Application, Assets, Sprite } from "pixi.js";
     // Move the sprite to the center of the screen
     box.position.set(app.screen.width / 2, app.screen.height / 2);
 
-    // Add the bunny to the stage
+    // Add the box to the stage
     app.stage.addChild(box);
 })();
