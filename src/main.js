@@ -102,24 +102,27 @@ const boxes = new Map();
         app.stage.on('pointermove', onDragMove);
     }
 
+    function inCell(box, cell) {
+        return (
+            20 * Math.abs(box.position.x - cell.position.x) < background.width &&
+            20 * Math.abs(box.position.y - cell.position.y) < background.height
+        )
+    }
+
     function onDragEnd() {
         if (dragTarget) {
             app.stage.off('pointermove', onDragMove);
             dragTarget.alpha = 1;
 
-            const grid_margin_x = background.width / 20;
-            const grid_margin_y = background.height / 20;
             // TODO: Find more efficient way to do this
             for (let i = 0; i < grid_elements.length; i++) {
                 // Check if the dragTarget is within grid_margin pixels of the grid_element
-                if (Math.abs(dragTarget.position.x - grid_elements[i].position.x) < grid_margin_x &&
-                    Math.abs(dragTarget.position.y - grid_elements[i].position.y) < grid_margin_y) {
+                if (inCell(dragTarget, grid_elements[i])) {
                     // Make it so two boxes can't be placed on top of each other
                     for (let [box, box_data] of boxes) {
                         if (box === dragTarget) continue;
                         if (box_data.type === "floating") continue;
-                        if (Math.abs(box.position.x - grid_elements[i].position.x) < grid_margin_x &&
-                            Math.abs(box.position.y - grid_elements[i].position.y) < grid_margin_y) {
+                        if (inCell(box, grid_elements[i])) {
                             return;
                         }
                     }
