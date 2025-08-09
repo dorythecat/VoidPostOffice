@@ -110,6 +110,7 @@ const grid_margin_y = 40;
             app.stage.off('pointermove', onDragMove);
             dragTarget.alpha = 1;
 
+            // TODO: Find more efficient way to do this
             for (let i = 0; i < grid_elements.length; i++) {
                 // Check if the dragTarget is within grid_margin pixels of the grid_element
                 if (Math.abs(dragTarget.position.x - grid_elements[i].position.x) < grid_margin_x && Math.abs(dragTarget.position.y - grid_elements[i].position.y) < grid_margin_y) {
