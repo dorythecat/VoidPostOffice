@@ -5,13 +5,13 @@ import { Application, Assets, Sprite } from "pixi.js";
     const app = new Application();
 
     // Initialize the application
-    await app.init({ background: "#1099bb", resizeTo: window });
+    await app.init({ background: "#111111", resizeTo: window });
 
     // Append the application canvas to the document body
     document.getElementById("pixi-container").appendChild(app.canvas);
 
     // Load the bunny texture
-    const texture = await Assets.load("/assets/bunny.png");
+    const texture = await Assets.load("/assets/boxes/box_1.png");
 
     // Create a bunny Sprite
     const bunny = new Sprite(texture);
