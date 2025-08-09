@@ -136,10 +136,24 @@ const grid_spacing_y = 10;
         boxes.set(box, { type: type });
     }
 
+    /*
     for (let i = 1; i < 9; i++) {
         for (let j = 1; j < 9; j++) {
             if (Math.random() < 0.5) continue;
             addBox(grid_offset_x + i * (background.width / 10 + grid_spacing_x), grid_offset_y + j * (background.height / 10 + grid_spacing_y));
         }
-    }
+    }*/
+
+    addBox(grid_offset_x + 3 * (background.width / 10 + grid_spacing_x), grid_offset_y + 8 * (background.height / 10 + grid_spacing_y), "floating");
+
+    app.ticker.add((delta) => {
+        for (let [box, box_data] of boxes) {
+            if (box_data.type === "floating") {
+                if (dragTarget && dragTarget.parent === box.parent) continue;
+                if (box.position.y > window.innerHeight / 2 - background.height / 2 + background.height / 10 + grid_spacing_y) {
+                    box.position.y -= 1;
+                }
+            }
+        }
+    })
 })();
