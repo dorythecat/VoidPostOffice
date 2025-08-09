@@ -5,6 +5,9 @@ import { GlowFilter } from "pixi-filters";
 const grid_spacing_x = 10;
 const grid_spacing_y = 10;
 
+// Variables needed all throughout the application
+const boxes = new Map();
+
 (async () => {
     // Create a new application
     const app = new Application();
@@ -105,6 +108,14 @@ const grid_spacing_y = 10;
             for (let i = 0; i < grid_elements.length; i++) {
                 // Check if the dragTarget is within grid_margin pixels of the grid_element
                 if (Math.abs(dragTarget.position.x - grid_elements[i].position.x) < grid_margin_x && Math.abs(dragTarget.position.y - grid_elements[i].position.y) < grid_margin_y) {
+                    // Make it so two boxes can't be placed on top of each other
+                    for (let [box, box_data] of boxes) {
+                        if (box === dragTarget) continue;
+                        if (box_data.type === "floating") continue;
+                        if (Math.abs(box.position.x - grid_elements[i].position.x) < grid_margin_x && Math.abs(box.position.y - grid_elements[i].position.y) < grid_margin_y) {
+                            return;
+                        }
+                    }
                     dragTarget.position.set(grid_elements[i].position.x, grid_elements[i].position.y);
                 }
             }
@@ -113,7 +124,6 @@ const grid_spacing_y = 10;
         }
     }
 
-    let boxes = new Map();
     function addBox(x, y, type = "normal") {
         // Create a box Sprite
         const box = new Sprite(boxTexture);
@@ -133,17 +143,17 @@ const grid_spacing_y = 10;
         app.stage.addChild(box);
 
         // Add the box to the boxes array
-        boxes.set(box, { type: type });
+        boxes.set(box, { x: x, y: y, type: type });
     }
 
-    /*
     for (let i = 1; i < 9; i++) {
         for (let j = 1; j < 9; j++) {
             if (Math.random() < 0.5) continue;
             addBox(grid_offset_x + i * (background.width / 10 + grid_spacing_x), grid_offset_y + j * (background.height / 10 + grid_spacing_y));
         }
-    }*/
+    }
 
+    /*
     addBox(grid_offset_x + 3 * (background.width / 10 + grid_spacing_x), grid_offset_y + 8 * (background.height / 10 + grid_spacing_y), "floating");
 
     app.ticker.add((delta) => {
@@ -156,4 +166,5 @@ const grid_spacing_y = 10;
             }
         }
     })
+    */
 })();
