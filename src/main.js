@@ -124,6 +124,9 @@ const boxes = new Map();
                         }
                     }
                     dragTarget.position.set(grid_elements[i].position.x, grid_elements[i].position.y);
+                    boxes.get(dragTarget).x = dragTarget.position.x;
+                    boxes.get(dragTarget).y = dragTarget.position.y;
+                    break;
                 }
             }
 
