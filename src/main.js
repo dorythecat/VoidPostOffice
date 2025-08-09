@@ -33,6 +33,15 @@ import { GlowFilter } from "pixi-filters";
         app.stage.addChild(star);
     }
 
+    const background = new Sprite(Texture.WHITE);
+    background.width = app.screen.height - 100;
+    background.height = app.screen.height - 100;
+    background.anchor.set(0.5);
+    background.position.set(app.screen.width / 2, app.screen.height / 2);
+    background.tint = 0xc0c0c0;
+    background.opacity = 0.5;
+    app.stage.addChild(background);
+
     // Create a box Sprite
     const box = new Sprite(boxTexture);
     box.scale.set(3);
@@ -50,6 +59,21 @@ import { GlowFilter } from "pixi-filters";
     function onDragMove(event) {
         if (dragTarget) {
             dragTarget.parent.toLocal(event.global, null, dragTarget.position);
+
+            let x = window.innerWidth / 2 - background.getBounds().width / 2 + box.width / 2;
+            let y = window.innerHeight / 2 - background.getBounds().height / 2 + box.height / 2;
+
+            if (dragTarget.position.x < x) {
+                dragTarget.position.x = x;
+            } else if (dragTarget.position.x > window.innerWidth - x) {
+                dragTarget.position.x = window.innerWidth - x;
+            }
+
+            if (dragTarget.position.y < y) {
+                dragTarget.position.y = y;
+            } else if (dragTarget.position.y > window.innerHeight - y) {
+                dragTarget.position.y = window.innerHeight - y;
+            }
         }
     }
 
@@ -75,15 +99,6 @@ import { GlowFilter } from "pixi-filters";
 
     // Move the sprite to the center of the screen
     box.position.set(app.screen.width / 2, app.screen.height / 2);
-
-    const background = new Sprite(Texture.WHITE);
-    background.width = app.screen.height - 100;
-    background.height = app.screen.height - 100;
-    background.anchor.set(0.5);
-    background.position.set(app.screen.width / 2, app.screen.height / 2);
-    background.tint = 0xc0c0c0;
-    background.opacity = 0.5;
-    app.stage.addChild(background);
 
     // Add the box to the stage
     app.stage.addChild(box);
