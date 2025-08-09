@@ -139,6 +139,7 @@ const boxes = new Map();
         box.cursor = "pointer";
         box.eventMode = "static";
         if (type === "floating") box.tint = 0xaa0000;
+        else if (type === "lonely") box.tint = 0x101010
         box.on('pointerdown', onDragStart, box);
 
         // Center the sprite's anchor point
@@ -159,7 +160,7 @@ const boxes = new Map();
             if (Math.random() < 0.5) continue;
             addBox(grid_offset_x + i * (background.width / 10 + grid_spacing_x),
                    grid_offset_y + j * (background.height / 10 + grid_spacing_y),
-                 Math.random() < 0.5 ? "floating" : "normal");
+                 Math.random() < 0.5 ? (Math.random() < 0.5 ? "floating" : "lonely") : "normal");
         }
     }
 
@@ -171,10 +172,14 @@ const boxes = new Map();
         );
     }
 
+    let lonelyCounter = 0;
     app.ticker.add((delta) => {
         const floatingBoxes = Array.from(boxes).filter(([box, box_data]) =>
             box_data.type === "floating" && dragTarget !== box
         );
+        const lonelyBoxes = Array.from(boxes).filter(([box, box_data]) =>
+            box_data.type === "lonely" && dragTarget !== box
+        )
 
         floatingBoxes.forEach(([box, _]) => {
             if (box.position.y <= grid_offset_y + box.height + grid_spacing_y) {
@@ -194,6 +199,19 @@ const boxes = new Map();
 
             // Revert position if collision detected
             if (collisionDetected) box.position.y = originalY;
+        });
+
+        // Make lonely boxes shake
+        lonelyBoxes.forEach(([box, box_data]) => {
+            lonelyCounter++;
+            if (lonelyCounter % 5 === 0) {
+                // Reset position
+                box.position.x = box_data.x;
+                box.position.y = box_data.y;
+                return;
+            }
+            box.position.x += Math.random() * 2 - 1;
+            box.position.y += Math.random() * 2 - 1;
         });
     });
 })();
