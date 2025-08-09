@@ -79,7 +79,7 @@ function makeSquare(x, y, width, height) {
     ];
 }
 
-positions = makeSquare(0, 0, 100, 100);
+positions = makeSquare(0, 0, canvas.width, canvas.height);
 
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
@@ -96,7 +96,7 @@ gl.enableVertexAttribArray(positionAttributeLocation);
 
 // set the resolution
 gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
-gl.uniform4f(colorUniformLocation, 1, 0, 0, 1);
+gl.uniform4f(colorUniformLocation, 0, 0, 0, 1);
 
 
 
