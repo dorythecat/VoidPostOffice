@@ -7,7 +7,7 @@ import TerserPlugin from "terser-webpack-plugin";
 export default (_env, argv) => {
   return {
     stats: "minimal", // Keep console output easy to read.
-    entry: "./src/main.ts", // Your program entry point
+    entry: "./src/main.js", // Your program entry point
 
     // Your build destination
     output: {
@@ -53,18 +53,11 @@ export default (_env, argv) => {
       ],
     },
 
-    // Explain webpack how to do Typescript
     module: {
-      rules: [
-        {
-          test: /\.ts(x)?$/,
-          loader: "ts-loader",
-          exclude: /node_modules/,
-        },
-      ],
+      rules: [],
     },
     resolve: {
-      extensions: [".tsx", ".ts", ".js"],
+      extensions: [".js", ".jsx"],
     },
 
     plugins: [
