@@ -63,17 +63,11 @@ import { GlowFilter } from "pixi-filters";
             let x = window.innerWidth / 2 - background.getBounds().width / 2 + box.width / 2;
             let y = window.innerHeight / 2 - background.getBounds().height / 2 + box.height / 2;
 
-            if (dragTarget.position.x < x) {
-                dragTarget.position.x = x;
-            } else if (dragTarget.position.x > window.innerWidth - x) {
-                dragTarget.position.x = window.innerWidth - x;
-            }
+            if (dragTarget.position.x < x) dragTarget.position.x = x;
+            else if (dragTarget.position.x > window.innerWidth - x) dragTarget.position.x = window.innerWidth - x;
 
-            if (dragTarget.position.y < y) {
-                dragTarget.position.y = y;
-            } else if (dragTarget.position.y > window.innerHeight - y) {
-                dragTarget.position.y = window.innerHeight - y;
-            }
+            if (dragTarget.position.y < y) dragTarget.position.y = y;
+            else if (dragTarget.position.y > window.innerHeight - y) dragTarget.position.y = window.innerHeight - y;
         }
     }
 
