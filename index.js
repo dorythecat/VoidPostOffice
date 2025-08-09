@@ -69,14 +69,16 @@ const positionBuffer = gl.createBuffer();
 
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-const positions = [
-    10, 20,
-    80, 20,
-    10, 30,
-    10, 30,
-    80, 20,
-    80, 30,
-];
+function makeSquare(x, y, width, height) {
+    return [
+        x, y,
+        x + width, y,
+        x, y + height,
+        x + width, y + height,
+    ];
+}
+
+positions = makeSquare(0, 0, 100, 100);
 
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
