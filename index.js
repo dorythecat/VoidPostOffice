@@ -102,13 +102,7 @@ gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
 // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-const size = 2;          // 2 components per iteration
-const type = gl.FLOAT;   // the data is 32bit floats
-const normalize = false; // don't normalize the data
-const stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
-const offset = 0;        // start at the beginning of the buffer
-gl.vertexAttribPointer(positionAttributeLocation, size, type, normalize, stride, offset)
+gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0)
 
-const primitiveType = gl.TRIANGLES;
-const count = positions.length / size;
-gl.drawArrays(primitiveType, offset, count);
+// Draw the scene
+gl.drawArrays(gl.TRIANGLE_STRIP, 0, positions.length / 2);
