@@ -1,4 +1,4 @@
-import { Application, Assets, Sprite } from "pixi.js";
+import {Application, Assets, Sprite, Texture} from "pixi.js";
 import { GlowFilter } from "pixi-filters";
 
 (async () => {
@@ -75,6 +75,15 @@ import { GlowFilter } from "pixi-filters";
 
     // Move the sprite to the center of the screen
     box.position.set(app.screen.width / 2, app.screen.height / 2);
+
+    const background = new Sprite(Texture.WHITE);
+    background.width = app.screen.height - 100;
+    background.height = app.screen.height - 100;
+    background.anchor.set(0.5);
+    background.position.set(app.screen.width / 2, app.screen.height / 2);
+    background.tint = 0xc0c0c0;
+    background.opacity = 0.5;
+    app.stage.addChild(background);
 
     // Add the box to the stage
     app.stage.addChild(box);
