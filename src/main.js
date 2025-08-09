@@ -32,7 +32,10 @@ const boxes = new Map();
     }
 
     for (let i = 0; i < 500; i++) {
-        const star = createStar(Math.random() * app.screen.width, Math.random() * app.screen.height, Math.random() * 10, Math.random() * 0xffffff);
+        const star = createStar(Math.random() * app.screen.width,
+                                       Math.random() * app.screen.height,
+                                     Math.random() * 10,
+                                          Math.random() * 0xffffff);
         star.alpha = Math.random();
         star.filters = [
             new GlowFilter({ distance: 15, outerStrength: 2, color: star.tint })
@@ -59,7 +62,8 @@ const boxes = new Map();
             placeholder_grid_element.width = background.width / 10;
             placeholder_grid_element.height = background.height / 10;
             placeholder_grid_element.anchor.set(0.5);
-            placeholder_grid_element.position.set(grid_offset_x + i * (background.width / 10 + grid_spacing_x), grid_offset_y + j * (background.height / 10 + grid_spacing_y));
+            placeholder_grid_element.position.set(grid_offset_x + i * (background.width / 10 + grid_spacing_x),
+                                                  grid_offset_y + j * (background.height / 10 + grid_spacing_y));
             app.stage.addChild(placeholder_grid_element);
 
             grid_elements.push(placeholder_grid_element);
@@ -108,12 +112,14 @@ const boxes = new Map();
             // TODO: Find more efficient way to do this
             for (let i = 0; i < grid_elements.length; i++) {
                 // Check if the dragTarget is within grid_margin pixels of the grid_element
-                if (Math.abs(dragTarget.position.x - grid_elements[i].position.x) < grid_margin_x && Math.abs(dragTarget.position.y - grid_elements[i].position.y) < grid_margin_y) {
+                if (Math.abs(dragTarget.position.x - grid_elements[i].position.x) < grid_margin_x &&
+                    Math.abs(dragTarget.position.y - grid_elements[i].position.y) < grid_margin_y) {
                     // Make it so two boxes can't be placed on top of each other
                     for (let [box, box_data] of boxes) {
                         if (box === dragTarget) continue;
                         if (box_data.type === "floating") continue;
-                        if (Math.abs(box.position.x - grid_elements[i].position.x) < grid_margin_x && Math.abs(box.position.y - grid_elements[i].position.y) < grid_margin_y) {
+                        if (Math.abs(box.position.x - grid_elements[i].position.x) < grid_margin_x &&
+                            Math.abs(box.position.y - grid_elements[i].position.y) < grid_margin_y) {
                             return;
                         }
                     }
@@ -151,7 +157,9 @@ const boxes = new Map();
     for (let i = 1; i < 9; i++) {
         for (let j = 1; j < 9; j++) {
             if (Math.random() < 0.5) continue;
-            addBox(grid_offset_x + i * (background.width / 10 + grid_spacing_x), grid_offset_y + j * (background.height / 10 + grid_spacing_y), Math.random() < 0.5 ? "floating" : "normal");
+            addBox(grid_offset_x + i * (background.width / 10 + grid_spacing_x),
+                   grid_offset_y + j * (background.height / 10 + grid_spacing_y),
+                 Math.random() < 0.5 ? "floating" : "normal");
         }
     }
 
@@ -169,7 +177,7 @@ const boxes = new Map();
         );
 
         floatingBoxes.forEach(([box, _]) => {
-            if (box.position.y <= window.innerHeight / 2 - background.height / 2 + background.height / 10 + grid_spacing_y) {
+            if (box.position.y <= grid_offset_y + box.height + grid_spacing_y) {
                 return; // Skip if already at the top of the screen
             }
 
