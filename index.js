@@ -64,6 +64,7 @@ const program = createProgram(gl, vertexShader, fragmentShader);
 
 const positionAttributeLocation = gl.getAttribLocation(program, "a_position");
 const resolutionUniformLocation = gl.getUniformLocation(program, "u_resolution");
+const colorUniformLocation = gl.getUniformLocation(program, "u_color");
 
 const positionBuffer = gl.createBuffer();
 
@@ -95,6 +96,7 @@ gl.enableVertexAttribArray(positionAttributeLocation);
 
 // set the resolution
 gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
+gl.uniform4f(colorUniformLocation, 1, 0, 0, 1);
 
 
 
