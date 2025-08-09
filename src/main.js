@@ -13,12 +13,12 @@ import { Application, Assets, Sprite } from "pixi.js";
     // Load the bunny texture
     const texture = await Assets.load("/assets/boxes/box_1.png");
 
-    // Create a bunny Sprite
-    const bunny = new Sprite(texture);
-    bunny.scale.set(3);
-    bunny.cursor = "pointer";
-    bunny.eventMode = "static";
-    bunny.on('pointerdown', onDragStart, bunny);
+    // Create a box Sprite
+    const box = new Sprite(texture);
+    box.scale.set(3);
+    box.cursor = "pointer";
+    box.eventMode = "static";
+    box.on('pointerdown', onDragStart, box);
 
     let dragTarget = null;
 
@@ -51,11 +51,11 @@ import { Application, Assets, Sprite } from "pixi.js";
     }
 
     // Center the sprite's anchor point
-    bunny.anchor.set(0.5);
+    box.anchor.set(0.5);
 
     // Move the sprite to the center of the screen
-    bunny.position.set(app.screen.width / 2, app.screen.height / 2);
+    box.position.set(app.screen.width / 2, app.screen.height / 2);
 
     // Add the bunny to the stage
-    app.stage.addChild(bunny);
+    app.stage.addChild(box);
 })();
