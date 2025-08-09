@@ -155,13 +155,42 @@ const boxes = new Map();
         }
     }
 
+    function checkCollision(box1, box2, margin_x = 0, margin_y = 0) {
+        return (
+            box1.x < box2.x + box2.width + margin_x &&
+            box1.x + box1.width + margin_x > box2.x &&
+            box1.y < box2.y + box2.height + margin_y &&
+            box1.y + box1.height + margin_y > box2.y
+        );
+    }
+
     app.ticker.add((delta) => {
-        for (let [box, box_data] of boxes) {
-            if (box_data.type === "floating") {
-                if (dragTarget === box) continue;
-                if (box.position.y <= window.innerHeight / 2 - background.height / 2 + background.height / 10 + grid_spacing_y) continue;
-                box.position.y -= delta.deltaMS / 100;
+        const floatingBoxes = Array.from(boxes).filter(([box, box_data]) =>
+            box_data.type === "floating" && dragTarget !== box
+        );
+
+        floatingBoxes.forEach(([box, _]) => {
+            if (box.position.y <= window.innerHeight / 2 - background.height / 2 + background.height / 10 + grid_spacing_y) {
+                return; // Skip if already at minimum Y position
             }
-        }
-    })
+
+            const originalY = box.position.y;
+            box.position.y -= delta.deltaMS / 100; // Move upward
+
+            // Check for collisions with margin
+            let collisionDetected = false;
+            Array.from(boxes).forEach(([otherBox, _]) => {
+                if (otherBox === box) return;
+
+                if (checkCollision(box, otherBox, grid_spacing_x, grid_spacing_y)) {
+                    collisionDetected = true;
+                }
+            });
+
+            // Revert position if collision detected (with margin)
+            if (collisionDetected) {
+                box.position.y = originalY;
+            }
+        });
+    });
 })();
