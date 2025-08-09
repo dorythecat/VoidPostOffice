@@ -132,7 +132,7 @@ const boxes = new Map();
         box.height = background.height / 10;
         box.cursor = "pointer";
         box.eventMode = "static";
-        if (type === "floating") box.tint = 0x333333;
+        if (type === "floating") box.tint = 0xaa0000;
         box.on('pointerdown', onDragStart, box);
 
         // Center the sprite's anchor point
@@ -155,10 +155,9 @@ const boxes = new Map();
         }
     }
 
-    function checkCollision(box1, box2, margin_x = 0, margin_y = 0) {
+    function checkCollision(box1, box2, margin_y = 0) {
         return (
-            box1.x < box2.x + box2.width + margin_x &&
-            box1.x + box1.width + margin_x > box2.x &&
+            box1.x === box2.x && // We only need to check for collisions with other boxes on the column precisely
             box1.y < box2.y + box2.height + margin_y &&
             box1.y + box1.height + margin_y > box2.y
         );
@@ -182,7 +181,7 @@ const boxes = new Map();
             Array.from(boxes).forEach(([otherBox, _]) => {
                 if (otherBox === box) return;
 
-                if (checkCollision(box, otherBox, grid_spacing_x, grid_spacing_y)) collisionDetected = true;
+                if (checkCollision(box, otherBox, grid_spacing_y)) collisionDetected = true;
             });
 
             // Revert position if collision detected
