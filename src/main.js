@@ -172,9 +172,9 @@ const boxes = new Map();
 
     function checkCollision(box1, box2, margin_y = 0) {
         return (
-            box1.x === box2.x && // We only need to check for collisions with other boxes on the column precisely
-            box1.y < box2.y + box2.height + margin_y &&
-            box1.y + box1.height + margin_y > box2.y
+            box1.x === box2.x && // We only need to check for collisions with other boxes on the same column
+            box1.y < box2.y + background.height / 10 + margin_y &&
+            box1.y + background.height / 10 + margin_y > box2.y
         );
     }
 
@@ -197,8 +197,12 @@ const boxes = new Map();
 
             // Check for collisions
             let collisionDetected = false;
-            Array.from(boxes).forEach(([otherBox, _]) => {
+            Array.from(boxes).forEach(([otherBox, otherBox_data]) => {
                 if (otherBox === box) return;
+
+                // Solves the edge case with lonely boxes
+                if (otherBox_data.type === "lonely" &&
+                    checkCollision(box, otherBox_data, grid_spacing_y)) collisionDetected = true;
 
                 if (checkCollision(box, otherBox, grid_spacing_y)) collisionDetected = true;
             });
