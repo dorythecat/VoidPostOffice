@@ -184,7 +184,7 @@ const boxes = new Map();
             box_data.type === "lonely" && dragTarget !== box
         )
 
-        floatingBoxes.forEach(([box, _]) => {
+        floatingBoxes.forEach(([box, box_data]) => {
             if (box.position.y <= grid_offset_y + box.height + grid_spacing_y) {
                 return; // Skip if already at the top of the screen
             }
@@ -201,7 +201,10 @@ const boxes = new Map();
             });
 
             // Revert position if collision detected
-            if (collisionDetected) box.position.y = originalY;
+            if (collisionDetected) {
+                box.position.y = originalY;
+                box_data.y = originalY;
+            }
         });
 
         // Make lonely boxes shake
