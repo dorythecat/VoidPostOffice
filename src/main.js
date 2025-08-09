@@ -113,8 +113,8 @@ const grid_spacing_y = 10;
         }
     }
 
-    let boxes = [];
-    function addBox(x, y) {
+    let boxes = new Map();
+    function addBox(x, y, type = "normal") {
         // Create a box Sprite
         const box = new Sprite(boxTexture);
         box.width = background.width / 10;
@@ -133,7 +133,7 @@ const grid_spacing_y = 10;
         app.stage.addChild(box);
 
         // Add the box to the boxes array
-        boxes.push(box);
+        boxes.set(box, { type: type });
     }
 
     for (let i = 1; i < 9; i++) {
