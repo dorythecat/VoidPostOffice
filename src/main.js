@@ -171,26 +171,22 @@ const boxes = new Map();
 
         floatingBoxes.forEach(([box, _]) => {
             if (box.position.y <= window.innerHeight / 2 - background.height / 2 + background.height / 10 + grid_spacing_y) {
-                return; // Skip if already at minimum Y position
+                return; // Skip if already at the top of the screen
             }
 
             const originalY = box.position.y;
             box.position.y -= delta.deltaMS / 100; // Move upward
 
-            // Check for collisions with margin
+            // Check for collisions
             let collisionDetected = false;
             Array.from(boxes).forEach(([otherBox, _]) => {
                 if (otherBox === box) return;
 
-                if (checkCollision(box, otherBox, grid_spacing_x, grid_spacing_y)) {
-                    collisionDetected = true;
-                }
+                if (checkCollision(box, otherBox, grid_spacing_x, grid_spacing_y)) collisionDetected = true;
             });
 
-            // Revert position if collision detected (with margin)
-            if (collisionDetected) {
-                box.position.y = originalY;
-            }
+            // Revert position if collision detected
+            if (collisionDetected) box.position.y = originalY;
         });
     });
 })();
