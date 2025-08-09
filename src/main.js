@@ -63,14 +63,6 @@ const grid_spacing_y = 10;
         }
     }
 
-    // Create a box Sprite
-    const box = new Sprite(boxTexture);
-    box.width = background.width / 10;
-    box.height = background.height / 10;
-    box.cursor = "pointer";
-    box.eventMode = "static";
-    box.on('pointerdown', onDragStart, box);
-
     let dragTarget = null;
 
     app.stage.eventMode = 'static';
@@ -82,8 +74,8 @@ const grid_spacing_y = 10;
         if (dragTarget) {
             dragTarget.parent.toLocal(event.global, null, dragTarget.position);
 
-            let x = window.innerWidth / 2 - background.getBounds().width / 2 + box.width / 2;
-            let y = window.innerHeight / 2 - background.getBounds().height / 2 + box.height / 2;
+            let x = window.innerWidth / 2 - background.getBounds().width / 2 + background.width / 20;
+            let y = window.innerHeight / 2 - background.getBounds().height / 2 + background.height / 20;
 
             if (dragTarget.position.x < x) dragTarget.position.x = x;
             else if (dragTarget.position.x > window.innerWidth - x) dragTarget.position.x = window.innerWidth - x;
@@ -121,12 +113,32 @@ const grid_spacing_y = 10;
         }
     }
 
-    // Center the sprite's anchor point
-    box.anchor.set(0.5);
+    let boxes = [];
+    function addBox(x, y) {
+        // Create a box Sprite
+        const box = new Sprite(boxTexture);
+        box.width = background.width / 10;
+        box.height = background.height / 10;
+        box.cursor = "pointer";
+        box.eventMode = "static";
+        box.on('pointerdown', onDragStart, box);
 
-    // Move the sprite to the center of the screen
-    box.position.set(app.screen.width / 2, app.screen.height / 2);
+        // Center the sprite's anchor point
+        box.anchor.set(0.5);
 
-    // Add the box to the stage
-    app.stage.addChild(box);
+        // Move the sprite to the center of the screen
+        box.position.set(x, y);
+
+        // Add the box to the stage
+        app.stage.addChild(box);
+
+        // Add the box to the boxes array
+        boxes.push(box);
+    }
+
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            addBox(grid_offset_x + i * (background.width / 10 + grid_spacing_x), grid_offset_y + j * (background.height / 10 + grid_spacing_y));
+        }
+    }
 })();
