@@ -94,6 +94,7 @@ const boxes = new Map();
         // * We want to track the movement of this particular touch *
         this.alpha = 0.7;
         dragTarget = this;
+        app.stage.setChildIndex(this, app.stage.children.length - 1); // Make sure the dragged sprite is on top of everything else
         app.stage.on('pointermove', onDragMove);
     }
 
