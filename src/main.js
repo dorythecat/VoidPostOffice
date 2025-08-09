@@ -34,8 +34,8 @@ import { GlowFilter } from "pixi-filters";
     }
 
     const background = new Sprite(Texture.WHITE);
-    background.width = app.screen.height - 100;
-    background.height = app.screen.height - 100;
+    background.width = Math.min(app.screen.height, app.screen.width) - 100;
+    background.height = Math.min(app.screen.height, app.screen.width) - 100;
     background.anchor.set(0.5);
     background.position.set(app.screen.width / 2, app.screen.height / 2);
     background.tint = 0xc0c0c0;
@@ -44,7 +44,8 @@ import { GlowFilter } from "pixi-filters";
 
     // Create a box Sprite
     const box = new Sprite(boxTexture);
-    box.scale.set(3);
+    box.width = background.width / 8;
+    box.height = background.height / 8;
     box.cursor = "pointer";
     box.eventMode = "static";
     box.on('pointerdown', onDragStart, box);
@@ -75,7 +76,7 @@ import { GlowFilter } from "pixi-filters";
         // Store a reference to the data
         // * The reason for this is because of multitouch *
         // * We want to track the movement of this particular touch *
-        this.alpha = 0.5;
+        this.alpha = 0.7;
         dragTarget = this;
         app.stage.on('pointermove', onDragMove);
     }
