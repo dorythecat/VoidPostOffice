@@ -136,8 +136,9 @@ const grid_spacing_y = 10;
         boxes.push(box);
     }
 
-    for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 10; j++) {
+    for (let i = 1; i < 9; i++) {
+        for (let j = 1; j < 9; j++) {
+            if (Math.random() < 0.5) continue;
             addBox(grid_offset_x + i * (background.width / 10 + grid_spacing_x), grid_offset_y + j * (background.height / 10 + grid_spacing_y));
         }
     }
