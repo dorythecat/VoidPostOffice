@@ -158,10 +158,9 @@ const boxes = new Map();
     app.ticker.add((delta) => {
         for (let [box, box_data] of boxes) {
             if (box_data.type === "floating") {
-                if (dragTarget && dragTarget.parent === box.parent) continue;
-                if (box.position.y > window.innerHeight / 2 - background.height / 2 + background.height / 10 + grid_spacing_y) {
-                    box.position.y -= delta.deltaMS / 100;
-                }
+                if (dragTarget === box) continue;
+                if (box.position.y <= window.innerHeight / 2 - background.height / 2 + background.height / 10 + grid_spacing_y) continue;
+                box.position.y -= delta.deltaMS / 100;
             }
         }
     })
