@@ -5,9 +5,6 @@ import { GlowFilter } from "pixi-filters";
 const grid_spacing_x = 10;
 const grid_spacing_y = 10;
 
-const grid_margin_x = 40;
-const grid_margin_y = 40;
-
 (async () => {
     // Create a new application
     const app = new Application();
@@ -55,7 +52,7 @@ const grid_margin_y = 40;
     for (let i = 1; i < 9; i++) {
         for (let j = 1; j < 9; j++) {
             const placeholder_grid_element = new Sprite(Texture.WHITE);
-            placeholder_grid_element.tint = (i * 15 + j * 15);
+            placeholder_grid_element.tint = 0x333333;
             placeholder_grid_element.width = background.width / 10;
             placeholder_grid_element.height = background.height / 10;
             placeholder_grid_element.anchor.set(0.5);
@@ -110,6 +107,8 @@ const grid_margin_y = 40;
             app.stage.off('pointermove', onDragMove);
             dragTarget.alpha = 1;
 
+            const grid_margin_x = background.width / 20;
+            const grid_margin_y = background.height / 20;
             // TODO: Find more efficient way to do this
             for (let i = 0; i < grid_elements.length; i++) {
                 // Check if the dragTarget is within grid_margin pixels of the grid_element
