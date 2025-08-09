@@ -5,6 +5,9 @@ import { GlowFilter } from "pixi-filters";
 const grid_spacing_x = 10;
 const grid_spacing_y = 10;
 
+const grid_margin_x = 40;
+const grid_margin_y = 40;
+
 (async () => {
     // Create a new application
     const app = new Application();
@@ -106,6 +109,14 @@ const grid_spacing_y = 10;
         if (dragTarget) {
             app.stage.off('pointermove', onDragMove);
             dragTarget.alpha = 1;
+
+            for (let i = 0; i < grid_elements.length; i++) {
+                // Check if the dragTarget is within grid_margin pixels of the grid_element
+                if (Math.abs(dragTarget.position.x - grid_elements[i].position.x) < grid_margin_x && Math.abs(dragTarget.position.y - grid_elements[i].position.y) < grid_margin_y) {
+                    dragTarget.position.set(grid_elements[i].position.x, grid_elements[i].position.y);
+                }
+            }
+
             dragTarget = null;
         }
     }
