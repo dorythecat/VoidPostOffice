@@ -132,6 +132,7 @@ const boxes = new Map();
         box.height = background.height / 10;
         box.cursor = "pointer";
         box.eventMode = "static";
+        if (type === "floating") box.tint = 0x333333;
         box.on('pointerdown', onDragStart, box);
 
         // Center the sprite's anchor point
@@ -150,22 +151,18 @@ const boxes = new Map();
     for (let i = 1; i < 9; i++) {
         for (let j = 1; j < 9; j++) {
             if (Math.random() < 0.5) continue;
-            addBox(grid_offset_x + i * (background.width / 10 + grid_spacing_x), grid_offset_y + j * (background.height / 10 + grid_spacing_y));
+            addBox(grid_offset_x + i * (background.width / 10 + grid_spacing_x), grid_offset_y + j * (background.height / 10 + grid_spacing_y), Math.random() < 0.5 ? "floating" : "normal");
         }
     }
-
-    /*
-    addBox(grid_offset_x + 3 * (background.width / 10 + grid_spacing_x), grid_offset_y + 8 * (background.height / 10 + grid_spacing_y), "floating");
 
     app.ticker.add((delta) => {
         for (let [box, box_data] of boxes) {
             if (box_data.type === "floating") {
                 if (dragTarget && dragTarget.parent === box.parent) continue;
                 if (box.position.y > window.innerHeight / 2 - background.height / 2 + background.height / 10 + grid_spacing_y) {
-                    box.position.y -= 1;
+                    box.position.y -= delta.deltaMS / 100;
                 }
             }
         }
     })
-    */
 })();
