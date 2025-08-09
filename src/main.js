@@ -48,6 +48,7 @@ const grid_spacing_y = 10;
 
     const grid_offset_x = window.innerWidth / 2 - background.width / 2 + background.width / 20 - grid_spacing_x * 4;
     const grid_offset_y = window.innerHeight / 2 - background.height / 2 + background.height / 20 - grid_spacing_y * 4;
+    let grid_elements = [];
     for (let i = 1; i < 9; i++) {
         for (let j = 1; j < 9; j++) {
             const placeholder_grid_element = new Sprite(Texture.WHITE);
@@ -57,6 +58,8 @@ const grid_spacing_y = 10;
             placeholder_grid_element.anchor.set(0.5);
             placeholder_grid_element.position.set(grid_offset_x + i * (background.width / 10 + grid_spacing_x), grid_offset_y + j * (background.height / 10 + grid_spacing_y));
             app.stage.addChild(placeholder_grid_element);
+
+            grid_elements.push(placeholder_grid_element);
         }
     }
 
