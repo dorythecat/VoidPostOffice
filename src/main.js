@@ -58,12 +58,4 @@ import { Application, Assets, Sprite } from "pixi.js";
 
     // Add the bunny to the stage
     app.stage.addChild(bunny);
-
-    // Listen for animate update
-    app.ticker.add((time) => {
-        // Just for fun, let's rotate mr rabbit a little.
-        // * Delta is 1 if running at 100% performance *
-        // * Creates frame-independent transformation *
-        bunny.rotation += 0.1 * time.deltaTime;
-    });
 })();
