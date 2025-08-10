@@ -34,6 +34,7 @@ const boxes = new Map(); // Store our boxes and their information
         star.anchor.set(0.5);
         star.position.set(x, y);
         star.alpha = Math.random();
+        if (star.alpha < 0.5) star.alpha = 0.5; // Ensure the star is visible
         star.filters = [
             new GlowFilter({ distance: 15, outerStrength: 2, color: star.tint })
         ]
@@ -226,6 +227,24 @@ const boxes = new Map(); // Store our boxes and their information
         );
     }
 
+    // Star movement
+    const starSpeedX = Math.random() * 2 - 1;
+    const starSpeedY = Math.random() * 2 - 1;
+    const speedFactor = Math.random() * 100;
+    app.ticker.add((delta) => {
+        for (let star of stars) {
+            star.position.x += starSpeedX * delta.deltaMS / speedFactor;
+            star.position.y += starSpeedY * delta.deltaMS / speedFactor;
+
+            if (star.position.x < -star.width) star.position.x = app.screen.width;
+            else if (star.position.x > app.screen.width) star.position.x = -star.width;
+            if (star.position.y < -star.height) star.position.y = app.screen.height;
+            else if (star.position.y > app.screen.height) star.position.y = -star.height;
+        }
+    })
+
+
+    // Main game loop
     let timer = 60;
     let lonelyCounter = 0;
     app.ticker.add((delta) => {
