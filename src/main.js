@@ -166,7 +166,8 @@ const boxes = new Map();
         box.cursor = "pointer";
         box.eventMode = "static";
         if (type === "floating") box.tint = 0xaa0000;
-        else if (type === "lonely") box.tint = 0x101010
+        else if (type === "lonely") box.tint = 0x101010;
+        else if (type === "sinking") box.tint = 0x00aa00;
         box.on('pointerdown', onDragStart, box);
 
         // Center the sprite's anchor point
@@ -185,7 +186,7 @@ const boxes = new Map();
     for (let i = 1; i < 9; i++) {
         for (let j = 1; j < 9; j++) {
             if (Math.random() < 0.5) continue;
-            let boxType = Math.random() < 0.5 ? (Math.random() < 0.5 ? "normal" : "lonely") : (Math.random() < 0.5 ? "floating" : "weighted");
+            let boxType = Math.random() < 0.5 ? (Math.random() < 0.5 ? "normal" : "lonely") : (Math.random() < 0.5 ? "floating" : "sinking");
             addBox(grid_offset_x + i * (background.width / 10 + grid_spacing_x),
                    grid_offset_y + j * (background.height / 10 + grid_spacing_y),
                  boxType);
@@ -197,7 +198,10 @@ const boxes = new Map();
     );
     const lonelyBoxes = Array.from(boxes).filter(([box, box_data]) =>
         box_data.type === "lonely" && dragTarget !== box
-    )
+    );
+    const sinkingBoxes = Array.from(boxes).filter(([box, box_data]) =>
+        box_data.type === "sinking" && dragTarget !== box
+    );
 
     while (lonelyBoxes.length % 3 !== 0) {
         let randomBox = Math.floor(Math.random() * lonelyBoxes.length);
@@ -237,7 +241,54 @@ const boxes = new Map();
                     break;
                 }
 
-                if (checkCollision(box, otherBox, grid_spacing_y)) {
+                if (otherBox_data.type === "sinking" &&
+                    checkCollision(box, otherBox)) { // Remove spacing for sinking box collisions
+                    collisionDetected = true;
+                    break;
+                }
+
+                if (otherBox_data.type !== "sinking" &&
+                    checkCollision(box, otherBox, grid_spacing_y)) {
+                    collisionDetected = true;
+                    break;
+                }
+            }
+
+            // Revert position if collision detected
+            if (collisionDetected) {
+                box.position.y = originalY;
+                box_data.y = originalY;
+            }
+        });
+
+        sinkingBoxes.forEach(([box, box_data]) => {
+            if (box.position.y >= window.innerHeight - grid_offset_y - box.height) {
+                return; // Skip if already at the top of the screen
+            }
+
+            const originalY = box.position.y;
+            box.position.y += delta.deltaMS / 100; // Move upward
+
+            // Check for collisions
+            let collisionDetected = false;
+            for (let [otherBox, otherBox_data] of boxes) {
+                if (otherBox === box) continue;
+
+                // Solves the edge case with lonely boxes
+                if (otherBox_data.type === "lonely" &&
+                    checkCollision(box, otherBox_data, grid_spacing_y)) {
+                    collisionDetected = true;
+                    break;
+                }
+
+                if (otherBox_data.type === "floating" &&
+                    checkCollision(box, otherBox)) { // Remove spacing for floating box collisions
+                    collisionDetected = true;
+                    break;
+                }
+
+                if (otherBox_data.type !== "floating" &&
+                    checkCollision(box, otherBox, grid_spacing_y)) {
                     collisionDetected = true;
                     break;
                 }
@@ -273,6 +324,7 @@ const boxes = new Map();
             box.position.y += Math.random() * 2 - 1;
         });
 
+        // Delivery time!
         if (timer < 1) {
             app.ticker.stop();
             app.stage.eventMode = 'none';
