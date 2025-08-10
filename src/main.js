@@ -237,7 +237,7 @@ const boxes = new Map();
             for (let [otherBox, otherBox_data] of lonelyBoxes) {
                 if (otherBox === box) continue;
                 // Check if the other box is in the same column as the lonely box
-                if (otherBox_data.x === box_data.x) neighbours++;
+                if (otherBox_data.x === box_data.x || otherBox_data.y === box_data.y) neighbours++;
             }
 
             lonelyCounter++;
