@@ -7,3 +7,11 @@ Hack Club.
   office. You are tasked with packing the Interdimensional Cube to send the packets
   to the right place. Will you be able to send all the packets, or will time win
   the race?
+
+# Assets and tools used
+- [Alagard Font](https://www.dafont.com/alagard.font), by
+  [Hewett Tsoi](https://www.dafont.com/hewett-tsoi.d4888)
+- [PixiJS Framework](https://pixijs.com/)
+- [Node.js](https://nodejs.org)
+
+All other assets have been made by myself.

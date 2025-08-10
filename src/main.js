@@ -1,4 +1,4 @@
-import {Application, Assets, Sprite, Texture} from "pixi.js";
+import { Application, Assets, Sprite, Texture, BitmapText } from "pixi.js";
 import { GlowFilter } from "pixi-filters";
 
 // Global variables
@@ -21,6 +21,21 @@ const boxes = new Map();
     // Load textures
     const starTexture = await Assets.load("/assets/star.png");
     const boxTexture = await Assets.load("/assets/boxes/box_1.png");
+
+    await Assets.load('/assets/fonts/alagard.ttf');
+
+    const text = new BitmapText({
+        text: 'Loaded font!',
+        style: {
+            fontFamily: 'alagard',
+            fontSize: 32,
+            fill: '#ffcc00',
+        },
+    });
+
+    text.anchor.set(0.5);
+    text.position.set(app.screen.width / 6, app.screen.height / 2);
+    app.stage.addChild(text);
 
     function createStar(x, y, size, color) {
         const star = new Sprite(starTexture);
