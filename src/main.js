@@ -6,7 +6,8 @@ const grid_spacing_x = 10;
 const grid_spacing_y = 10;
 
 // Variables needed all throughout the application
-const boxes = new Map();
+const stars = []; // Store our stars
+const boxes = new Map(); // Store our boxes and their information
 
 (async () => {
     // Create a new application
@@ -30,20 +31,21 @@ const boxes = new Map();
         star.tint = color;
         star.width = size;
         star.height = size;
+        star.anchor.set(0.5);
         star.position.set(x, y);
-        return star;
-    }
-
-    for (let i = 0; i < 500; i++) {
-        const star = createStar(Math.random() * app.screen.width,
-                                       Math.random() * app.screen.height,
-                                     Math.random() * 10,
-                                          Math.random() * 0xffffff);
         star.alpha = Math.random();
         star.filters = [
             new GlowFilter({ distance: 15, outerStrength: 2, color: star.tint })
         ]
+        stars.push(star);
         app.stage.addChild(star);
+    }
+
+    for (let i = 0; i < 500; i++) {
+        createStar(Math.random() * app.screen.width,
+                   Math.random() * app.screen.height,
+                 Math.random() * 10,
+                Math.random() * 0xffffff);
     }
 
     // Add timer text
