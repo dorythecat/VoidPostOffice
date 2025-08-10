@@ -210,6 +210,13 @@ const boxes = new Map();
         lonelyBoxes.splice(randomBox, 1);
     }
 
+    while (sinkingBoxes.length > 8) {
+        let randomBox = Math.floor(Math.random() * sinkingBoxes.length);
+        app.stage.removeChild(sinkingBoxes[randomBox][0]);
+        boxes.delete(sinkingBoxes[randomBox][0]);
+        sinkingBoxes.splice(randomBox, 1);
+    }
+
     function checkCollision(box1, box2, margin_y = 0) {
         return (
             box1.x === box2.x && // We only need to check for collisions with other boxes on the same column
