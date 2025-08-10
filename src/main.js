@@ -22,20 +22,8 @@ const boxes = new Map();
     const starTexture = await Assets.load("/assets/star.png");
     const boxTexture = await Assets.load("/assets/boxes/box_1.png");
 
+    // Load fonts
     await Assets.load('/assets/fonts/alagard.ttf');
-
-    const text = new BitmapText({
-        text: 'Loaded font!',
-        style: {
-            fontFamily: 'alagard',
-            fontSize: 32,
-            fill: '#ffcc00',
-        },
-    });
-
-    text.anchor.set(0.5);
-    text.position.set(app.screen.width / 6, app.screen.height / 2);
-    app.stage.addChild(text);
 
     function createStar(x, y, size, color) {
         const star = new Sprite(starTexture);
@@ -57,6 +45,24 @@ const boxes = new Map();
         ]
         app.stage.addChild(star);
     }
+
+    // Add timer
+    const timerText = new BitmapText({
+        text: '01:00',
+        style: {
+            fontFamily: 'alagard',
+            fontSize: 64,
+            fill: '#c0c0c0',
+            stroke: {
+                color: '#eeeeee',
+                width: 2
+            }
+        },
+    });
+
+    timerText.anchor.set(0.5);
+    timerText.position.set(app.screen.width / 6, app.screen.height / 2);
+    app.stage.addChild(timerText);
 
     const background = new Sprite(Texture.WHITE);
     background.width = Math.min(app.screen.height, app.screen.width) - 100;
@@ -209,6 +215,7 @@ const boxes = new Map();
     }
 
     let lonelyCounter = 0;
+    let timer = 60;
     app.ticker.add((delta) => {
         floatingBoxes.forEach(([box, box_data]) => {
             if (box.position.y <= grid_offset_y + box.height + grid_spacing_y) {
@@ -265,5 +272,12 @@ const boxes = new Map();
             box.position.x += Math.random() * 2 - 1;
             box.position.y += Math.random() * 2 - 1;
         });
+
+        if (timer < 1) {
+            app.ticker.stop();
+            alert("Game Over!");
+        }
+        timer -= delta.deltaMS / 1000;
+        timerText.text = "00:" + (timer < 10 ? "0" : "") + Math.floor(timer);
     });
 })();
