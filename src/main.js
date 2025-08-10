@@ -280,8 +280,8 @@ const boxes = new Map();
             // Calculate if you won or lost
             let won = true;
             for (let [box, box_data] of boxes) {
-                if (box_data.type === "lonely") {
-                    if (box.position.y > grid_offset_y + background.height / 10) {
+                if (box_data.type === "floating") {
+                    if (box.position.y > grid_offset_y + box.height + grid_spacing_y) {
                         won = false;
                         break;
                     }
