@@ -41,6 +41,6 @@ The precautions are:
 # How to run the game?
 To run the game in your own computer, you will need to have
 [Node.js](https://nodejs.org) installed. Then just clone this repository with
-`git clone https://github.com/hackclub/VoidPostOffice.git` and run `npm install`
+`git clone https://github.com/dorythecat/VoidPostOffice.git` and run `npm install`
 to install the dependencies. Finally, run `npm start` to start the game, and you
 will be given an address to open in your browser, where you can play!
