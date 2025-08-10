@@ -114,16 +114,19 @@ const boxes = new Map();
             app.stage.off('pointermove', onDragMove);
             dragTarget.alpha = 1;
 
-            // TODO: Find more efficient way to do this
-            for (let i = 0; i < grid_elements.length; i++) {
+            // Get all the grid elements in the same column as the dragTarget
+            let grid_elements_x = grid_elements.filter(element => (
+                20 * Math.abs(element.position.x - dragTarget.position.x) < background.width
+            ));
+            for (let i = 0; i < grid_elements_x.length; i++) {
                 // Check if the dragTarget is within grid_margin pixels of the grid_element
-                if (inCell(dragTarget, grid_elements[i])) {
+                if (inCell(dragTarget, grid_elements_x[i])) {
                     // Make it so two boxes can't be placed on top of each other
-                    for (let [box, box_data] of boxes) {
+                    for (let [box, _] of boxes) {
                         if (box === dragTarget) continue;
-                        if (inCell(box, grid_elements[i])) return;
+                        if (inCell(box, grid_elements_x[i])) return;
                     }
-                    dragTarget.position.set(grid_elements[i].position.x, grid_elements[i].position.y);
+                    dragTarget.position.set(grid_elements_x[i].position.x, grid_elements_x[i].position.y);
                     boxes.get(dragTarget).x = dragTarget.position.x;
                     boxes.get(dragTarget).y = dragTarget.position.y;
                     break;
@@ -194,15 +197,21 @@ const boxes = new Map();
 
             // Check for collisions
             let collisionDetected = false;
-            Array.from(boxes).forEach(([otherBox, otherBox_data]) => {
-                if (otherBox === box) return;
+            for (let [otherBox, otherBox_data] of boxes) {
+                if (otherBox === box) continue;
 
                 // Solves the edge case with lonely boxes
                 if (otherBox_data.type === "lonely" &&
-                    checkCollision(box, otherBox_data, grid_spacing_y)) collisionDetected = true;
+                    checkCollision(box, otherBox_data, grid_spacing_y)) {
+                    collisionDetected = true;
+                    break;
+                }
 
-                if (checkCollision(box, otherBox, grid_spacing_y)) collisionDetected = true;
-            });
+                if (checkCollision(box, otherBox, grid_spacing_y)) {
+                    collisionDetected = true;
+                    break;
+                }
+            }
 
             // Revert position if collision detected
             if (collisionDetected) {
