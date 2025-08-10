@@ -236,8 +236,8 @@ const boxes = new Map();
             box.position.y -= delta.deltaMS / 100; // Move upward
 
             // Get all the boxes in the same column as this one
-            let boxes_x = Array.from(boxes).filter(([otherBox, _]) =>
-                box.x === otherBox.x && box !== otherBox
+            let boxes_x = Array.from(boxes).filter(([otherBox, otherBox_data]) =>
+                (box.x === otherBox.x || box_data.x === otherBox_data.x) && box !== otherBox
             );
 
             // Check for collisions
@@ -263,8 +263,8 @@ const boxes = new Map();
             box.position.y += delta.deltaMS / 100; // Move upward
 
             // Get all the boxes in the same column as this one
-            let boxes_x = Array.from(boxes).filter(([otherBox, _]) =>
-                box.x === otherBox.x && box !== otherBox
+            let boxes_x = Array.from(boxes).filter(([otherBox, otherBox_data]) =>
+                (box.x === otherBox.x || box_data.x === otherBox_data.x) && box !== otherBox
             );
 
             // Check for collisions
