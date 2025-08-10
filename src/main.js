@@ -218,8 +218,7 @@ const boxes = new Map();
     }
 
     function checkCollision(box1, box2, margin_y = 0) {
-        return (
-            box1.x === box2.x && // We only need to check for collisions with other boxes on the same column
+        return ( // We only check the y dimensions because the x dimensions should be checked by the preceding code
             box1.y < box2.y + background.height / 10 + margin_y &&
             box1.y + background.height / 10 + margin_y > box2.y
         );
@@ -236,10 +235,13 @@ const boxes = new Map();
             const originalY = box.position.y;
             box.position.y -= delta.deltaMS / 100; // Move upward
 
-            // Check for collisions
-            for (let [otherBox, otherBox_data] of boxes) {
-                if (otherBox === box) continue;
+            // Get all the boxes in the same column as this one
+            let boxes_x = Array.from(boxes).filter(([otherBox, _]) =>
+                box.x === otherBox.x && box !== otherBox
+            );
 
+            // Check for collisions
+            for (let [otherBox, otherBox_data] of boxes_x) {
                 if (checkCollision(box,
                     otherBox_data.type === "lonely" ? otherBox_data : otherBox, // Solves the edge case with lonely boxes
                     otherBox_data.type === "sinking" ? 0 : grid_spacing_y)) { // Remove spacing for sinking box collisions
@@ -260,10 +262,13 @@ const boxes = new Map();
             const originalY = box.position.y;
             box.position.y += delta.deltaMS / 100; // Move upward
 
-            // Check for collisions
-            for (let [otherBox, otherBox_data] of boxes) {
-                if (otherBox === box) continue;
+            // Get all the boxes in the same column as this one
+            let boxes_x = Array.from(boxes).filter(([otherBox, _]) =>
+                box.x === otherBox.x && box !== otherBox
+            );
 
+            // Check for collisions
+            for (let [otherBox, otherBox_data] of boxes_x) {
                 // Collisions don't have spacing, since sinking boxes shouldn't be put on top of other boxes
                 if (checkCollision(box,
                     otherBox_data.type === "lonely" ? otherBox_data : otherBox)) {
