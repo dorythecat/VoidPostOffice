@@ -121,7 +121,6 @@ const boxes = new Map();
                     // Make it so two boxes can't be placed on top of each other
                     for (let [box, box_data] of boxes) {
                         if (box === dragTarget) continue;
-                        if (box_data.type === "floating") continue;
                         if (inCell(box, grid_elements[i])) return;
                     }
                     dragTarget.position.set(grid_elements[i].position.x, grid_elements[i].position.y);
