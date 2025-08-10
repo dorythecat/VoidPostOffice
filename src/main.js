@@ -194,7 +194,6 @@ const boxes = new Map();
     }
 
     let lonelyCounter = 0;
-    let chaosModifier = 100;
     app.ticker.add((delta) => {
         floatingBoxes.forEach(([box, box_data]) => {
             if (box.position.y <= grid_offset_y + box.height + grid_spacing_y) {
@@ -246,11 +245,10 @@ const boxes = new Map();
                 // Reset position
                 box.position.x = box_data.x;
                 box.position.y = box_data.y;
-                //chaosModifier += 0.1;
                 return;
             }
-            box.position.x += (Math.random() * 2 - 1) * chaosModifier / 100;
-            box.position.y += (Math.random() * 2 - 1) * chaosModifier / 100;
+            box.position.x += Math.random() * 2 - 1;
+            box.position.y += Math.random() * 2 - 1;
         });
     });
 })();
