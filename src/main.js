@@ -46,7 +46,7 @@ const boxes = new Map();
         app.stage.addChild(star);
     }
 
-    // Add timer
+    // Add timer text
     const timerText = new BitmapText({
         text: '01:00',
         style: {
@@ -57,7 +57,7 @@ const boxes = new Map();
                 color: '#eeeeee',
                 width: 2
             }
-        },
+        }
     });
 
     timerText.anchor.set(0.5);
@@ -276,7 +276,19 @@ const boxes = new Map();
         if (timer < 1) {
             app.ticker.stop();
             app.stage.eventMode = 'none';
-            alert("Game Over!");
+
+            // Calculate if you won or lost
+            let won = true;
+            for (let [box, box_data] of boxes) {
+                if (box_data.type === "lonely") {
+                    if (box.position.y > grid_offset_y + background.height / 10) {
+                        won = false;
+                        break;
+                    }
+                }
+            }
+
+            alert(won ? "You won!" : "You lost!");
         }
         timer -= delta.deltaMS / 1000;
         timerText.text = "00:" + (timer < 10 ? "0" : "") + Math.floor(timer);
