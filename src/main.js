@@ -179,6 +179,7 @@ const boxes = new Map();
     }
 
     let lonelyCounter = 0;
+    let chaosModifier = 100;
     app.ticker.add((delta) => {
         const floatingBoxes = Array.from(boxes).filter(([box, box_data]) =>
             box_data.type === "floating" && dragTarget !== box
@@ -227,10 +228,11 @@ const boxes = new Map();
                 // Reset position
                 box.position.x = box_data.x;
                 box.position.y = box_data.y;
+                chaosModifier += 0.1;
                 return;
             }
-            box.position.x += Math.random() * 2 - 1;
-            box.position.y += Math.random() * 2 - 1;
+            box.position.x += (Math.random() * 2 - 1) * chaosModifier / 100;
+            box.position.y += (Math.random() * 2 - 1) * chaosModifier / 100;
         });
     });
 })();
