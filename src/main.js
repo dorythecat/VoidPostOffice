@@ -187,7 +187,7 @@ const boxes = new Map();
             if (Math.random() < 0.5) continue;
             addBox(grid_offset_x + i * (background.width / 10 + grid_spacing_x),
                    grid_offset_y + j * (background.height / 10 + grid_spacing_y),
-                 Math.random() < 0.5 ? (Math.random() < 0.5 ? "floating" : "lonely") : "normal");
+                 Math.random() < 0.1 ? (Math.random() < 0.5 ? "floating" : "lonely") : "normal");
         }
     }
 
@@ -213,7 +213,7 @@ const boxes = new Map();
         );
     }
 
-    let timer = 60;
+    let timer = 10;
     let lonelyCounter = 0;
     app.ticker.add((delta) => {
         floatingBoxes.forEach(([box, box_data]) => {
@@ -278,13 +278,32 @@ const boxes = new Map();
 
             // Calculate if you won or lost
             let won = true;
-            for (let [box, box_data] of boxes) {
-                if (box_data.type === "floating") {
-                    if (box.position.y > grid_offset_y + box.height + grid_spacing_y) {
-                        won = false;
+            for (let [box, box_data] of floatingBoxes) {
+                // Means the box is floating or grabbed, so it should immediately lose
+                if (box.y !== box_data.y) {
+                    won = false;
+                    break;
+                }
+
+                // If the box is at the top of the grid, it should immediately lose
+                if (box.position.y <= grid_offset_y + box.height + grid_spacing_y) {
+                    won = false;
+                    break;
+                }
+
+                // Check if the box is below another box
+                let canContinue = false;
+                for (let [otherBox, otherBox_data] of boxes) {
+                    if (otherBox === box) continue;
+                    if (box.x !== otherBox.x) continue;
+                    if (box.y + background.height / 10 + grid_spacing_y > otherBox.y) {
+                        canContinue = true;
                         break;
                     }
-                }
+                } if (canContinue) continue;
+
+                won = false;
+                break;
             }
 
             alert(won ? "You won!" : "You lost!");

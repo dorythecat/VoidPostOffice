@@ -15,3 +15,11 @@ Hack Club.
 - [Node.js](https://nodejs.org)
 
 All other assets have been made by myself.
+
+# How to play
+Your objective is to safely deliver all the packages in The Tube. This requires
+having certain precautions to consider, which, if not followed, will lead to you
+losing your job, and therefore, the game! The precautions are:
+
+- Floating boxes should always be kept under another box, and never near the top
+  of The Tube, as they might escape into The Darkness.
