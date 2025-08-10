@@ -185,9 +185,10 @@ const boxes = new Map();
     for (let i = 1; i < 9; i++) {
         for (let j = 1; j < 9; j++) {
             if (Math.random() < 0.5) continue;
+            let boxType = Math.random() < 0.5 ? (Math.random() < 0.5 ? "normal" : "lonely") : (Math.random() < 0.5 ? "floating" : "weighted");
             addBox(grid_offset_x + i * (background.width / 10 + grid_spacing_x),
                    grid_offset_y + j * (background.height / 10 + grid_spacing_y),
-                 Math.random() < 0.5 ? (Math.random() < 0.5 ? "floating" : "lonely") : "normal");
+                 boxType);
         }
     }
 
