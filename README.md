@@ -26,8 +26,8 @@ you losing your job, and therefore, the game!
 The precautions are:
 
 - No two boxes may occupy the same space on The Tube, under risk of [[REDACTED]].
-- No box may be lifted at the time of delivery, due to a malfunction of the
-  [[REDACTED]] turbo-encabulator.
+- No box may be lifted or outside The Grid at the time of transportation, due to a
+  malfunction of the microspace turbo-encabulator.
 - Floating boxes (red) should always be kept under another box, and never near the
   top of The Tube, as they might escape into [[REDACTED]].
 - All lonely boxes (black) should have exactly three other lonely boxes in their

@@ -327,6 +327,13 @@ const boxes = new Map();
                 }
             }
 
+            // Check that no box is lifted from its place or outside the grid
+            for (let [box, box_data] of boxes) {
+                if (box.y === box_data.y) continue;
+                won = false;
+                break;
+            }
+
             alert(won ? "You won!" : "You lost!");
         }
         timer -= delta.deltaMS / 1000;
