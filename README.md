@@ -37,3 +37,10 @@ The precautions are:
 - Sinking boxes (green) cannot be placed above any other box, not even other
   sinking boxes, due to disruption of cargo during [[REDACTED]]. Be especially
   careful of putting sinking boxes atop floating boxes, as they might [[REDACTED]].
+
+# How to run the game?
+To run the game in your own computer, you will need to have
+[Node.js](https://nodejs.org) installed. Then just clone this repository with
+`git clone https://github.com/hackclub/VoidPostOffice.git` and run `npm install`
+to install the dependencies. Finally, run `npm start` to start the game, and you
+will be given an address to open in your browser, where you can play!
