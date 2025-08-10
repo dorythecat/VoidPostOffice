@@ -187,7 +187,7 @@ const boxes = new Map();
             if (Math.random() < 0.5) continue;
             addBox(grid_offset_x + i * (background.width / 10 + grid_spacing_x),
                    grid_offset_y + j * (background.height / 10 + grid_spacing_y),
-                 Math.random() < 0.1 ? (Math.random() < 0.5 ? "floating" : "lonely") : "normal");
+                 Math.random() < 0.5 ? (Math.random() < 0.5 ? "floating" : "lonely") : "normal");
         }
     }
 
@@ -213,7 +213,7 @@ const boxes = new Map();
         );
     }
 
-    let timer = 10;
+    let timer = 60;
     let lonelyCounter = 0;
     app.ticker.add((delta) => {
         floatingBoxes.forEach(([box, box_data]) => {
@@ -293,7 +293,7 @@ const boxes = new Map();
 
                 // Check if the box is below another box
                 let canContinue = false;
-                for (let [otherBox, otherBox_data] of boxes) {
+                for (let [otherBox, _] of boxes) {
                     if (otherBox === box) continue;
                     if (box.x !== otherBox.x) continue;
                     if (box.y + background.height / 10 + grid_spacing_y > otherBox.y) {
@@ -304,6 +304,27 @@ const boxes = new Map();
 
                 won = false;
                 break;
+            }
+
+            for (let [box, box_data] of lonelyBoxes) {
+                // Means the box is grabbed, so it should immediately lose
+                if (box.y !== box_data.y) {
+                    won = false;
+                    break;
+                }
+
+                // Detect how many neighbours the lonely box has
+                let neighbours = 0;
+                for (let [otherBox, otherBox_data] of lonelyBoxes) {
+                    if (otherBox === box) continue;
+                    // Check if the other box is in the same column or row as the lonely box
+                    if (otherBox_data.x === box_data.x || otherBox_data.y === box_data.y) neighbours++;
+                }
+
+                if (neighbours !== 2) {
+                    won = false;
+                    break;
+                }
             }
 
             alert(won ? "You won!" : "You lost!");

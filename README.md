@@ -17,9 +17,20 @@ Hack Club.
 All other assets have been made by myself.
 
 # How to play
-Your objective is to safely deliver all the packages in The Tube. This requires
-having certain precautions to consider, which, if not followed, will lead to you
-losing your job, and therefore, the game! The precautions are:
+Your objective is to safely deliver all the packages in The Tube. To do so, you
+can drag and drop the boxes in The Tube to move them around.
 
-- Floating boxes should always be kept under another box, and never near the top
-  of The Tube, as they might escape into The Darkness.
+You need to have certain precautions, though, which, if not followed, will lead to
+you losing your job, and therefore, the game!
+
+The precautions are:
+
+- No two boxes may occupy the same space on The Tube, under risk of [[REDACTED]].
+- No box may be lifted at the time of delivery, due to a malfunction of the
+  [[REDACTED]] turbo-encabulator.
+- Floating boxes (red) should always be kept under another box, and never near the
+  top of The Tube, as they might escape into [[REDACTED]].
+- All lonely boxes (black) should have exactly three other lonely boxes in their
+  row and column. This means that a box in a row with only one other box will
+  need a box placed either in the same row or column. If this rule is not kept,
+  lonely boxes might [[REDACTED]].
