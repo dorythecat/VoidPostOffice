@@ -61,7 +61,7 @@ const boxes = new Map();
     });
 
     timerText.anchor.set(0.5);
-    timerText.position.set(app.screen.width / 6, app.screen.height / 2);
+    timerText.position.set(app.screen.width / 5, app.screen.height / 7);
     app.stage.addChild(timerText);
 
     const background = new Sprite(Texture.WHITE);
