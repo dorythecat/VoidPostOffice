@@ -223,8 +223,16 @@ const boxes = new Map();
 
         // Make lonely boxes shake
         lonelyBoxes.forEach(([box, box_data]) => {
+            // Detect how many neighbours the lonely box has
+            let neighbours = 0;
+            for (let [otherBox, otherBox_data] of lonelyBoxes) {
+                if (otherBox === box) continue;
+                // Check if the other box is in the same column as the lonely box
+                if (otherBox_data.x === box_data.x) neighbours++;
+            }
+
             lonelyCounter++;
-            if (lonelyCounter % 5 === 0) {
+            if (lonelyCounter % 5 === 0 || neighbours === 2) {
                 // Reset position
                 box.position.x = box_data.x;
                 box.position.y = box_data.y;
