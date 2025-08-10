@@ -203,7 +203,6 @@ const boxes = new Map();
         app.stage.removeChild(lonelyBoxes[randomBox][0]);
         boxes.delete(lonelyBoxes[randomBox][0]);
         lonelyBoxes.splice(randomBox, 1);
-        console.log(lonelyBoxes.length);
     }
 
     function checkCollision(box1, box2, margin_y = 0) {
