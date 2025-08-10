@@ -214,8 +214,8 @@ const boxes = new Map();
         );
     }
 
-    let lonelyCounter = 0;
     let timer = 60;
+    let lonelyCounter = 0;
     app.ticker.add((delta) => {
         floatingBoxes.forEach(([box, box_data]) => {
             if (box.position.y <= grid_offset_y + box.height + grid_spacing_y) {
@@ -275,6 +275,7 @@ const boxes = new Map();
 
         if (timer < 1) {
             app.ticker.stop();
+            app.stage.eventMode = 'none';
             alert("Game Over!");
         }
         timer -= delta.deltaMS / 1000;
