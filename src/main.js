@@ -263,6 +263,7 @@ const boxes = new Map();
 
         sinkingBoxes.forEach(([box, box_data]) => {
             if (box.position.y >= window.innerHeight - grid_offset_y - box.height) {
+                box_data.y = box.position.y;
                 return; // Skip if already at the top of the screen
             }
 
