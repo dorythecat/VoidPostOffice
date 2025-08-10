@@ -237,34 +237,17 @@ const boxes = new Map();
             box.position.y -= delta.deltaMS / 100; // Move upward
 
             // Check for collisions
-            let collisionDetected = false;
             for (let [otherBox, otherBox_data] of boxes) {
                 if (otherBox === box) continue;
 
-                // Solves the edge case with lonely boxes
-                if (otherBox_data.type === "lonely" &&
-                    checkCollision(box, otherBox_data, grid_spacing_y)) {
-                    collisionDetected = true;
+                if (checkCollision(box,
+                    otherBox_data.type === "lonely" ? otherBox_data : otherBox, // Solves the edge case with lonely boxes
+                    otherBox_data.type === "sinking" ? 0 : grid_spacing_y)) { // Remove spacing for sinking box collisions
+                    // Revert position if collision detected
+                    box.position.y = originalY;
+                    box_data.y = originalY;
                     break;
                 }
-
-                if (otherBox_data.type === "sinking" &&
-                    checkCollision(box, otherBox)) { // Remove spacing for sinking box collisions
-                    collisionDetected = true;
-                    break;
-                }
-
-                if (otherBox_data.type !== "sinking" &&
-                    checkCollision(box, otherBox, grid_spacing_y)) {
-                    collisionDetected = true;
-                    break;
-                }
-            }
-
-            // Revert position if collision detected
-            if (collisionDetected) {
-                box.position.y = originalY;
-                box_data.y = originalY;
             }
         });
 
@@ -278,28 +261,17 @@ const boxes = new Map();
             box.position.y += delta.deltaMS / 100; // Move upward
 
             // Check for collisions
-            let collisionDetected = false;
             for (let [otherBox, otherBox_data] of boxes) {
                 if (otherBox === box) continue;
 
-                // Solves the edge case with lonely boxes
-                if (otherBox_data.type === "lonely" &&
-                    checkCollision(box, otherBox_data)) {
-                    collisionDetected = true;
-                    break;
-                }
-
                 // Collisions don't have spacing, since sinking boxes shouldn't be put on top of other boxes
-                if (checkCollision(box, otherBox)) {
-                    collisionDetected = true;
+                if (checkCollision(box,
+                    otherBox_data.type === "lonely" ? otherBox_data : otherBox)) {
+                    // Revert position if collision detected
+                    box.position.y = originalY;
+                    box_data.y = originalY;
                     break;
                 }
-            }
-
-            // Revert position if collision detected
-            if (collisionDetected) {
-                box.position.y = originalY;
-                box_data.y = originalY;
             }
         });
 
