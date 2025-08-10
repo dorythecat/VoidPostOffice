@@ -29,6 +29,7 @@ const boxes = new Map(); // Store our boxes and their information
     function createStar(x, y, size, color) {
         const star = new Sprite(starTexture);
         star.tint = color;
+        if (size < 1) size = 1;
         star.width = size;
         star.height = size;
         star.anchor.set(0.5);
@@ -235,6 +236,8 @@ const boxes = new Map(); // Store our boxes and their information
         for (let star of stars) {
             star.position.x += starSpeedX * delta.deltaMS / speedFactor;
             star.position.y += starSpeedY * delta.deltaMS / speedFactor;
+            if (Math.random() < 0.01) star.alpha = Math.random();
+            if (star.alpha < 0.5) star.alpha = 0.5;
 
             if (star.position.x < -star.width) star.position.x = app.screen.width;
             else if (star.position.x > app.screen.width) star.position.x = -star.width;
