@@ -170,6 +170,21 @@ const boxes = new Map();
         }
     }
 
+    const floatingBoxes = Array.from(boxes).filter(([box, box_data]) =>
+        box_data.type === "floating" && dragTarget !== box
+    );
+    const lonelyBoxes = Array.from(boxes).filter(([box, box_data]) =>
+        box_data.type === "lonely" && dragTarget !== box
+    )
+
+    while (lonelyBoxes.length % 3 !== 0) {
+        let randomBox = Math.floor(Math.random() * lonelyBoxes.length);
+        app.stage.removeChild(lonelyBoxes[randomBox][0]);
+        boxes.delete(lonelyBoxes[randomBox][0]);
+        lonelyBoxes.splice(randomBox, 1);
+        console.log(lonelyBoxes.length);
+    }
+
     function checkCollision(box1, box2, margin_y = 0) {
         return (
             box1.x === box2.x && // We only need to check for collisions with other boxes on the same column
@@ -181,13 +196,6 @@ const boxes = new Map();
     let lonelyCounter = 0;
     let chaosModifier = 100;
     app.ticker.add((delta) => {
-        const floatingBoxes = Array.from(boxes).filter(([box, box_data]) =>
-            box_data.type === "floating" && dragTarget !== box
-        );
-        const lonelyBoxes = Array.from(boxes).filter(([box, box_data]) =>
-            box_data.type === "lonely" && dragTarget !== box
-        )
-
         floatingBoxes.forEach(([box, box_data]) => {
             if (box.position.y <= grid_offset_y + box.height + grid_spacing_y) {
                 return; // Skip if already at the top of the screen
@@ -238,7 +246,7 @@ const boxes = new Map();
                 // Reset position
                 box.position.x = box_data.x;
                 box.position.y = box_data.y;
-                chaosModifier += 0.1;
+                //chaosModifier += 0.1;
                 return;
             }
             box.position.x += (Math.random() * 2 - 1) * chaosModifier / 100;
