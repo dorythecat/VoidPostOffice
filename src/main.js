@@ -122,9 +122,7 @@ const boxes = new Map();
                     for (let [box, box_data] of boxes) {
                         if (box === dragTarget) continue;
                         if (box_data.type === "floating") continue;
-                        if (inCell(box, grid_elements[i])) {
-                            return;
-                        }
+                        if (inCell(box, grid_elements[i])) return;
                     }
                     dragTarget.position.set(grid_elements[i].position.x, grid_elements[i].position.y);
                     boxes.get(dragTarget).x = dragTarget.position.x;
