@@ -276,19 +276,13 @@ const boxes = new Map();
 
                 // Solves the edge case with lonely boxes
                 if (otherBox_data.type === "lonely" &&
-                    checkCollision(box, otherBox_data, grid_spacing_y)) {
+                    checkCollision(box, otherBox_data)) {
                     collisionDetected = true;
                     break;
                 }
 
-                if (otherBox_data.type === "floating" &&
-                    checkCollision(box, otherBox)) { // Remove spacing for floating box collisions
-                    collisionDetected = true;
-                    break;
-                }
-
-                if (otherBox_data.type !== "floating" &&
-                    checkCollision(box, otherBox, grid_spacing_y)) {
+                // Collisions don't have spacing, since sinking boxes shouldn't be put on top of other boxes
+                if (checkCollision(box, otherBox)) {
                     collisionDetected = true;
                     break;
                 }

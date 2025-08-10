@@ -34,5 +34,6 @@ The precautions are:
   row and column. This means that a box in a row with only one other box will
   need a box placed either in the same row or column. If this rule is not kept,
   lonely boxes might [[REDACTED]].
-- Sinking boxes (green) cannot be placed above floating boxes, otherwise they might
-  remove themselves from their grid spaces during transportation.
+- Sinking boxes (green) cannot be placed above any other box, not even other
+  sinking boxes, due to disruption of cargo during [[REDACTED]]. Be especially
+  careful of putting sinking boxes atop floating boxes, as they might [[REDACTED]].
