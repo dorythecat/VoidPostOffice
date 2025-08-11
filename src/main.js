@@ -172,7 +172,7 @@ const boxes = new Map(); // Store our boxes and their information
         if (type === "floating") box.tint = 0xaa0000;
         else if (type === "lonely") box.tint = 0x101010;
         else if (type === "sinking") box.tint = 0x00aa00;
-        else if (type === "teleporting") box.tint = 0x0000aa;
+        else if (type === "quantum") box.tint = 0x0000aa;
         box.on('pointerdown', onDragStart, box);
 
         // Center the sprite's anchor point
@@ -197,7 +197,7 @@ const boxes = new Map(); // Store our boxes and their information
             else if (randomNumber < 0.5) boxType = "floating";
             else if (randomNumber < 0.7) boxType = "sinking";
             else if (randomNumber < 0.9) boxType = "lonely";
-            else if (0.9 < randomNumber) boxType = "teleporting";
+            else if (0.9 < randomNumber) boxType = "quantum";
             addBox(grid_offset_x + i * (background.width / 10 + grid_spacing_x),
                    grid_offset_y + j * (background.height / 10 + grid_spacing_y),
                  boxType);
@@ -213,8 +213,8 @@ const boxes = new Map(); // Store our boxes and their information
     const sinkingBoxes = Array.from(boxes).filter(([box, box_data]) =>
         box_data.type === "sinking" && dragTarget !== box
     );
-    const teleportingBoxes = Array.from(boxes).filter(([box, box_data]) =>
-        box_data.type === "teleporting" && dragTarget !== box
+    const quantumBoxes = Array.from(boxes).filter(([box, box_data]) =>
+        box_data.type === "quantum" && dragTarget !== box
     );
 
     while (lonelyBoxes.length % 3 !== 0) {
@@ -335,9 +335,9 @@ const boxes = new Map(); // Store our boxes and their information
             box.position.y += Math.random() * 2 - 1;
         });
 
-        // Teleporting boxes
+        // Quantum boxes
         if (timer > 3 && Math.random() < (timer - 3) / 1000) {
-            teleportingBoxes[Math.floor(Math.random() * teleportingBoxes.length)][0].position.set(
+            quantumBoxes[Math.floor(Math.random() * quantumBoxes.length)][0].position.set(
                 Math.random() * background.width + grid_offset_x - background.width / 10,
                 Math.random() * background.height + grid_offset_y - background.height / 10,
             );
