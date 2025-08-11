@@ -261,9 +261,10 @@ const boxes = new Map(); // Store our boxes and their information
     let timer = 60;
     let lonelyCounter = 0;
     app.ticker.add((delta) => {
-        floatingBoxes.forEach(([box, box_data]) => {
+        for (let [box, box_data] of floatingBoxes) {
             if (box.position.y <= grid_offset_y + box.height + grid_spacing_y) {
-                return; // Skip if already at the top of the screen
+                box_data.y = box.position.y;
+                continue; // Skip if already at the top of the screen
             }
 
             const originalY = box.position.y;
@@ -285,12 +286,11 @@ const boxes = new Map(); // Store our boxes and their information
                     break;
                 }
             }
-        });
+        }
 
-        sinkingBoxes.forEach(([box, box_data]) => {
+        for (let [box, box_data] of sinkingBoxes) {
             if (box.position.y >= window.innerHeight - grid_offset_y - box.height) {
-                box_data.y = box.position.y;
-                return; // Skip if already at the top of the screen
+                continue; // Skip if already at the top of the screen
             }
 
             const originalY = box.position.y;
@@ -312,11 +312,11 @@ const boxes = new Map(); // Store our boxes and their information
                     break;
                 }
             }
-        });
+        }
 
         // Make lonely boxes shake
-        lonelyBoxes.forEach(([box, box_data]) => {
-            if (box === dragTarget) return;
+        for (let [box, box_data] of lonelyBoxes) {
+            if (box === dragTarget) continue;
 
             // Detect how many neighbours the lonely box has
             let neighbours = 0;
@@ -331,11 +331,11 @@ const boxes = new Map(); // Store our boxes and their information
                 // Reset position
                 box.position.x = box_data.x;
                 box.position.y = box_data.y;
-                return;
+                continue;
             }
             box.position.x += Math.random() * 2 - 1;
             box.position.y += Math.random() * 2 - 1;
-        });
+        }
 
         // Quantum boxes
         if (quantumBoxes.length > 0) {
