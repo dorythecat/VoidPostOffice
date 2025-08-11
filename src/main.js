@@ -59,7 +59,7 @@ await Assets.load('/assets/fonts/alagard.ttf');
 // --- LEVEL GENERATION ---
 function generateLevel(app, level, timerText, background) {
     // Clear previous level
-    for (let [_, box] of boxes) app.stage.removeChild(box);
+    boxes.forEach((_, box) => app.stage.removeChild(box))
     boxes.clear();
 
     for (let element of grid_elements) app.stage.removeChild(element);
