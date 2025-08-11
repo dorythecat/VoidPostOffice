@@ -9,8 +9,6 @@ const grid_spacing_y = 10;
 const stars = []; // Store our stars
 const boxes = new Map(); // Store our boxes and their information
 
-let level = 0; // What level are we playing right now?
-
 const levelChances = [
     {
         time: 60, // Time to solve the level, in seconds
@@ -28,23 +26,19 @@ const levelChances = [
 let grid_size_x = 4;
 let grid_size_y = 4;
 
+// Load global assets
+
+// Load textures
+const starTexture = await Assets.load("/assets/star.png");
+const boxTexture = await Assets.load("/assets/boxes/box_1.png");
+
+// Load fonts
+await Assets.load('/assets/fonts/alagard.ttf');
+
 // Level generation function
-async function generateLevel() {
-    // Create a new application
-    const app = new Application();
-
-    // Initialize the application
-    await app.init({ background: "#111111", resizeTo: window });
-
+function generateLevel(app, level) {
     // Append the application canvas to the document body
     document.getElementById("pixi-container").appendChild(app.canvas);
-
-    // Load textures
-    const starTexture = await Assets.load("/assets/star.png");
-    const boxTexture = await Assets.load("/assets/boxes/box_1.png");
-
-    // Load fonts
-    await Assets.load('/assets/fonts/alagard.ttf');
 
     function createStar(x, y, size, color) {
         const star = new Sprite(starTexture);
@@ -448,5 +442,11 @@ async function generateLevel() {
 
 // Actual game logic
 (async () => {
-    await generateLevel();
+    // Create a new application
+    const app = new Application();
+
+    // Initialize the application
+    await app.init({ background: "#111111", resizeTo: window });
+
+    await generateLevel(app, 0); // Generate the test level
 })();
