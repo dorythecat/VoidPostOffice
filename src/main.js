@@ -59,12 +59,10 @@ await Assets.load('/assets/fonts/alagard.ttf');
 // --- LEVEL GENERATION ---
 function generateLevel(app, level, timerText, background) {
     // Clear previous level
-    boxes.forEach((_, box) => app.stage.removeChild(box))
+    for (let [_, box] of boxes) app.stage.removeChild(box);
     boxes.clear();
 
-    for (let element of grid_elements) {
-        app.stage.removeChild(element);
-    }
+    for (let element of grid_elements) app.stage.removeChild(element);
     grid_elements.length = 0;
 
     // Load settings for the current level
@@ -231,7 +229,7 @@ function generateLevel(app, level, timerText, background) {
             if (star.position.y < -star.height) star.position.y = app.screen.height;
             else if (star.position.y > app.screen.height) star.position.y = -star.height;
         }
-    })
+    });
 
     // Main game loop
     let timer = levelSettings[level].time;
