@@ -1,14 +1,14 @@
 import { Application, Assets, Sprite, Texture, BitmapText } from "pixi.js";
 import { GlowFilter } from "pixi-filters";
 
-// Global variables
+// --- GLOBAL VARIABLES ---
 const grid_spacing_x = 10;
 const grid_spacing_y = 10;
 
-// Variables needed all throughout the application
 const stars = []; // Store our stars
 const boxes = new Map(); // Store our boxes and their information
 
+// --- LEVEL CONFIG ---
 const levelChances = [
     {
         time: 60, // Time to solve the level, in seconds
@@ -26,8 +26,7 @@ const levelChances = [
 let grid_size_x = 4;
 let grid_size_y = 4;
 
-// Load global assets
-
+// --- GLOBAL ASSETS ---
 // Load textures
 const starTexture = await Assets.load("/assets/star.png");
 const boxTexture = await Assets.load("/assets/boxes/box_1.png");
@@ -35,7 +34,7 @@ const boxTexture = await Assets.load("/assets/boxes/box_1.png");
 // Load fonts
 await Assets.load('/assets/fonts/alagard.ttf');
 
-// Level generation function
+// --- LEVEL GENERATION ---
 function generateLevel(app, level) {
     // Append the application canvas to the document body
     document.getElementById("pixi-container").appendChild(app.canvas);
@@ -440,7 +439,7 @@ function generateLevel(app, level) {
     });
 }
 
-// Actual game logic
+// --- PIXIJS APP ---
 (async () => {
     // Create a new application
     const app = new Application();
