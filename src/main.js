@@ -447,5 +447,5 @@ function generateLevel(app, level) {
             Math.random() * 0xffffff);
     }
 
-    await generateLevel(app, 0); // Generate the test level
+    generateLevel(app, 0); // Generate the test level
 })();
