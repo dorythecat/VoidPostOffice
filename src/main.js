@@ -7,22 +7,45 @@ const grid_spacing_y = 10;
 
 const stars = []; // Store our stars
 const boxes = new Map(); // Store our boxes and their information
+const grid_elements = []; // Store the grid elements so we can clear them in between levels
+let currentLevel = 0;
 
 // --- LEVEL CONFIG ---
 const levelSettings = [
     {
-        // TIP: Try to keep them square if you want to actually make the game look decent enough
-        // NOTE: The maximum size I'd recommend is 10x10, since from there on it might or might not break...
         grid_size_x: 4,
         grid_size_y: 4,
-        time: 10, // Time to solve the level, in seconds
-        general: 0.5, // Chance of a box being placed in any cell at all
+        time: 10,
+        general: 0.5,
         normal: 1.0,
         floating: 0.0,
         sinking: 0.0,
         lonely: 0.0,
         quantum: 0.0
+    },
+    {
+        grid_size_x: 5,
+        grid_size_y: 5,
+        time: 15,
+        general: 0.6,
+        normal: 0.8,
+        floating: 0.2,
+        sinking: 0.0,
+        lonely: 0.0,
+        quantum: 0.0
+    },
+    {
+        grid_size_x: 6,
+        grid_size_y: 6,
+        time: 20,
+        general: 0.7,
+        normal: 0.7,
+        floating: 0.2,
+        sinking: 0.1,
+        lonely: 0.0,
+        quantum: 0.0
     }
+    // Add more levels as needed
 ];
 
 // --- GLOBAL ASSETS ---
@@ -35,6 +58,15 @@ await Assets.load('/assets/fonts/alagard.ttf');
 
 // --- LEVEL GENERATION ---
 function generateLevel(app, level, timerText, background) {
+    // Clear previous level
+    boxes.forEach((_, box) => app.stage.removeChild(box))
+    boxes.clear();
+
+    for (let element of grid_elements) {
+        app.stage.removeChild(element);
+    }
+    grid_elements.length = 0;
+
     // Load settings for the current level
     let currentLevelSettings = levelSettings[level];
 
@@ -46,7 +78,6 @@ function generateLevel(app, level, timerText, background) {
         window.innerHeight / 2 - background.height / 2 + background.height / (2 * currentLevelSettings.grid_size_y + 4) -
         grid_spacing_y * currentLevelSettings.grid_size_y / 2
     );
-    let grid_elements = [];
     for (let i = 1; i < currentLevelSettings.grid_size_x + 1; i++) {
         for (let j = 1; j < currentLevelSettings.grid_size_y + 1; j++) {
             const placeholder_grid_element = new Sprite(Texture.WHITE);
@@ -71,7 +102,7 @@ function generateLevel(app, level, timerText, background) {
     let dragTarget = null;
     function onDragMove(event) {
         if (!dragTarget) return; // Nothing to do
-        
+
         dragTarget.parent.toLocal(event.global, null, dragTarget.position);
         let x = window.innerWidth / 2 - background.getBounds().width / 2 + background.width / (2 * currentLevelSettings.grid_size_x + 4);
         let y = window.innerHeight / 2 - background.getBounds().height / 2 + background.height / (2 * currentLevelSettings.grid_size_x + 4);
@@ -82,12 +113,9 @@ function generateLevel(app, level, timerText, background) {
     }
 
     function onDragStart() {
-        // Store a reference to the data
-        // * The reason for this is because of multitouch *
-        // * We want to track the movement of this particular touch *
         this.alpha = 0.7;
         dragTarget = this;
-        app.stage.setChildIndex(this, app.stage.children.length - 1); // Make sure the dragged sprite is on top of everything else
+        app.stage.setChildIndex(this, app.stage.children.length - 1);
         app.stage.on('pointermove', onDragMove);
     }
 
@@ -100,17 +128,15 @@ function generateLevel(app, level, timerText, background) {
 
     function onDragEnd() {
         if (!dragTarget) return; // Nothing to do
-        
+
         app.stage.off('pointermove', onDragMove);
         dragTarget.alpha = 1;
         let grid_elements_x = grid_elements.filter(element => (
             (2 * currentLevelSettings.grid_size_x + 4) * Math.abs(element.position.x - dragTarget.position.x) < background.width
         ));
         for (let i = 0; i < grid_elements_x.length; i++) {
-            // Check if the dragTarget is within grid_margin pixels of the grid_element
             if (!inCell(dragTarget, grid_elements_x[i])) continue;
-            
-            // Make it so two boxes can't be placed on top of each other
+
             for (let [box, _] of boxes) {
                 if (box === dragTarget) continue;
                 if (inCell(box, grid_elements_x[i])) return;
@@ -123,7 +149,6 @@ function generateLevel(app, level, timerText, background) {
     }
 
     function addBox(x, y, type = "normal") {
-        // Create a box Sprite
         const box = new Sprite(boxTexture);
         box.width = background.width / (currentLevelSettings.grid_size_x + 2);
         box.height = background.height / (currentLevelSettings.grid_size_y + 2);
@@ -135,16 +160,9 @@ function generateLevel(app, level, timerText, background) {
         else if (type === "quantum") box.tint = 0x0000aa;
         box.on('pointerdown', onDragStart, box);
 
-        // Center the sprite's anchor point
         box.anchor.set(0.5);
-
-        // Move the sprite to the center of the screen
         box.position.set(x, y);
-
-        // Add the box to the stage
         app.stage.addChild(box);
-
-        // Add the box to the boxes array
         boxes.set(box, { x: x, y: y, type: type });
     }
 
@@ -152,7 +170,6 @@ function generateLevel(app, level, timerText, background) {
         for (let j = 1; j < currentLevelSettings.grid_size_y + 1; j++) {
             if (Math.random() > currentLevelSettings.general) continue;
             let boxType = "";
-            // TODO: Fix chances to actually be the ones that we put in the settings
             if (Math.random() < currentLevelSettings.normal) boxType = "normal";
             else if (Math.random() < currentLevelSettings.floating) boxType = "floating";
             else if (Math.random() < currentLevelSettings.sinking) boxType = "sinking";
@@ -192,7 +209,7 @@ function generateLevel(app, level, timerText, background) {
     }
 
     function checkCollision(box1, box2, margin_y = 0) {
-        return ( // We only check the y dimensions because the x dimensions should be checked by the preceding code
+        return (
             box1.y < box2.y + background.height / (currentLevelSettings.grid_size_x + 2) + margin_y &&
             box1.y + background.height / (currentLevelSettings.grid_size_y + 2) + margin_y > box2.y
         );
@@ -216,31 +233,27 @@ function generateLevel(app, level, timerText, background) {
         }
     })
 
-
     // Main game loop
     let timer = levelSettings[level].time;
     let lonelyCounter = 0;
-    app.ticker.add((delta) => {
+    const gameLoop = (delta) => {
         for (let [box, box_data] of floatingBoxes) {
             if (box.position.y <= grid_offset_y + box.height + grid_spacing_y) {
                 box_data.y = box.position.y;
-                continue; // Skip if already at the top of the screen
+                continue;
             }
 
             const originalY = box.position.y;
-            box.position.y -= delta.deltaMS / 100; // Move upward
+            box.position.y -= delta.deltaMS / 100;
 
-            // Get all the boxes in the same column as this one
             let boxes_x = Array.from(boxes).filter(([otherBox, otherBox_data]) =>
                 (box.x === otherBox.x || box_data.x === otherBox_data.x) && box !== otherBox
             );
 
-            // Check for collisions
             for (let [otherBox, otherBox_data] of boxes_x) {
                 if (checkCollision(box,
-                    otherBox_data.type === "lonely" ? otherBox_data : otherBox, // Solves the edge case with lonely boxes
-                    otherBox_data.type === "sinking" ? 0 : grid_spacing_y)) { // Remove spacing for sinking box collisions
-                    // Revert position if collision detected
+                    otherBox_data.type === "lonely" ? otherBox_data : otherBox,
+                    otherBox_data.type === "sinking" ? 0 : grid_spacing_y)) {
                     box.position.y = originalY;
                     box_data.y = originalY;
                     break;
@@ -250,23 +263,19 @@ function generateLevel(app, level, timerText, background) {
 
         for (let [box, box_data] of sinkingBoxes) {
             if (box.position.y >= window.innerHeight - grid_offset_y - box.height) {
-                continue; // Skip if already at the top of the screen
+                continue;
             }
 
             const originalY = box.position.y;
-            box.position.y += delta.deltaMS / 100; // Move upward
+            box.position.y += delta.deltaMS / 100;
 
-            // Get all the boxes in the same column as this one
             let boxes_x = Array.from(boxes).filter(([otherBox, otherBox_data]) =>
                 (box.x === otherBox.x || box_data.x === otherBox_data.x) && box !== otherBox
             );
 
-            // Check for collisions
             for (let [otherBox, otherBox_data] of boxes_x) {
-                // Collisions don't have spacing, since sinking boxes shouldn't be put on top of other boxes
                 if (checkCollision(box,
                     otherBox_data.type === "lonely" ? otherBox_data : otherBox)) {
-                    // Revert position if collision detected
                     box.position.y = originalY;
                     box_data.y = originalY;
                     break;
@@ -274,21 +283,17 @@ function generateLevel(app, level, timerText, background) {
             }
         }
 
-        // Make lonely boxes shake
         for (let [box, box_data] of lonelyBoxes) {
             if (box === dragTarget) continue;
 
-            // Detect how many neighbours the lonely box has
             let neighbours = 0;
             for (let [otherBox, otherBox_data] of lonelyBoxes) {
                 if (otherBox === box) continue;
-                // Check if the other box is in the same column or row as the lonely box
                 if (otherBox_data.x === box_data.x || otherBox_data.y === box_data.y) neighbours++;
             }
 
             lonelyCounter++;
             if (lonelyCounter % 5 === 0 || neighbours === 2) {
-                // Reset position
                 box.position.x = box_data.x;
                 box.position.y = box_data.y;
                 continue;
@@ -297,11 +302,9 @@ function generateLevel(app, level, timerText, background) {
             box.position.y += Math.random() * 2 - 1;
         }
 
-        // Quantum boxes
         if (quantumBoxes.length > 0) {
             if (timer > 3 && Math.random() < (timer - 3) / 1000) {
                 let randomBox = quantumBoxes[Math.floor(Math.random() * quantumBoxes.length)];
-                // Make sure we have an ungrabbed box or we'll fall into an infinite loop
                 while (randomBox === dragTarget && quantumBoxes.length > 1) {
                     randomBox = quantumBoxes[Math.floor(Math.random() * quantumBoxes.length)];
                 }
@@ -317,25 +320,21 @@ function generateLevel(app, level, timerText, background) {
 
         // Delivery time!
         if (timer < 1) {
-            app.ticker.stop();
+            app.ticker.remove(gameLoop);
             app.stage.eventMode = 'none';
 
-            // Calculate if you won or lost
             let won = true;
             for (let [box, box_data] of floatingBoxes) {
-                // Means the box is floating or grabbed, so it should immediately lose
                 if (box.y !== box_data.y) {
                     won = false;
                     break;
                 }
 
-                // If the box is at the top of the grid, it should immediately lose
                 if (box.position.y <= grid_offset_y + box.height + grid_spacing_y) {
                     won = false;
                     break;
                 }
 
-                // Check if the box is below another box
                 let canContinue = false;
                 for (let [otherBox, _] of boxes) {
                     if (otherBox === box) continue;
@@ -351,17 +350,14 @@ function generateLevel(app, level, timerText, background) {
             }
 
             for (let [box, box_data] of lonelyBoxes) {
-                // Means the box is grabbed, so it should immediately lose
                 if (box.y !== box_data.y) {
                     won = false;
                     break;
                 }
 
-                // Detect how many neighbours the lonely box has
                 let neighbours = 0;
                 for (let [otherBox, otherBox_data] of lonelyBoxes) {
                     if (otherBox === box) continue;
-                    // Check if the other box is in the same column or row as the lonely box
                     if (otherBox_data.x === box_data.x || otherBox_data.y === box_data.y) neighbours++;
                 }
 
@@ -371,29 +367,39 @@ function generateLevel(app, level, timerText, background) {
                 }
             }
 
-            // Check that no box is lifted from its place or outside the grid
             for (let [box, box_data] of boxes) {
                 if (box.y === box_data.y) continue;
                 won = false;
                 break;
             }
 
-            alert(won ? "You won!" : "You lost!");
+            if (won) {
+                if (currentLevel < levelSettings.length - 1) {
+                    currentLevel++;
+                    setTimeout(() => {
+                        generateLevel(app, currentLevel, timerText, background);
+                    }, 1500);
+                } else {
+                    alert("Congratulations! You've completed all levels!");
+                }
+            } else {
+                alert("You lost! Try again.");
+                setTimeout(() => {
+                    generateLevel(app, currentLevel, timerText, background);
+                }, 1500);
+            }
         }
         timer -= delta.deltaMS / 1000;
         timerText.text = "00:" + (timer < 10 ? "0" : "") + Math.floor(timer);
-    });
+    };
+
+    app.ticker.add(gameLoop);
 }
 
 // --- PIXIJS APP ---
 (async () => {
-    // Create a new application
     const app = new Application();
-
-    // Initialize the application
     await app.init({ background: "#111111", resizeTo: window });
-
-    // Append the application canvas to the document body
     document.getElementById("pixi-container").appendChild(app.canvas);
 
     function createStar(x, y, size, color) {
@@ -405,7 +411,7 @@ function generateLevel(app, level, timerText, background) {
         star.anchor.set(0.5);
         star.position.set(x, y);
         star.alpha = Math.random();
-        if (star.alpha < 0.5) star.alpha = 0.5; // Ensure the star is visible
+        if (star.alpha < 0.5) star.alpha = 0.5;
         star.filters = [
             new GlowFilter({ distance: 15, outerStrength: 2, color: star.tint })
         ]
@@ -420,7 +426,6 @@ function generateLevel(app, level, timerText, background) {
             Math.random() * 0xffffff);
     }
 
-    // Add timer text
     const timerText = new BitmapText({
         text: '01:00',
         style: {
@@ -438,7 +443,6 @@ function generateLevel(app, level, timerText, background) {
     timerText.position.set(app.screen.width / 5, app.screen.height / 7);
     app.stage.addChild(timerText);
 
-    // Generate the background
     const background = new Sprite(Texture.WHITE);
     background.width = Math.min(app.screen.height, app.screen.width) - 100;
     background.height = Math.min(app.screen.height, app.screen.width) - 100;
@@ -448,5 +452,5 @@ function generateLevel(app, level, timerText, background) {
     background.opacity = 0.5;
     app.stage.addChild(background);
 
-    generateLevel(app, 0, timerText, background); // Generate the test level
+    generateLevel(app, currentLevel, timerText, background);
 })();
