@@ -38,33 +38,6 @@ function generateLevel(app, level) {
     // Load settings for the current level
     let currentLevelSettings = levelSettings[level];
 
-    // Append the application canvas to the document body
-    document.getElementById("pixi-container").appendChild(app.canvas);
-
-    function createStar(x, y, size, color) {
-        const star = new Sprite(starTexture);
-        star.tint = color;
-        if (size < 1) size = 1;
-        star.width = size;
-        star.height = size;
-        star.anchor.set(0.5);
-        star.position.set(x, y);
-        star.alpha = Math.random();
-        if (star.alpha < 0.5) star.alpha = 0.5; // Ensure the star is visible
-        star.filters = [
-            new GlowFilter({ distance: 15, outerStrength: 2, color: star.tint })
-        ]
-        stars.push(star);
-        app.stage.addChild(star);
-    }
-
-    for (let i = 0; i < 500; i++) {
-        createStar(Math.random() * app.screen.width,
-            Math.random() * app.screen.height,
-            Math.random() * 10,
-            Math.random() * 0xffffff);
-    }
-
     // Add timer text
     const timerText = new BitmapText({
         text: '01:00',
@@ -446,6 +419,33 @@ function generateLevel(app, level) {
 
     // Initialize the application
     await app.init({ background: "#111111", resizeTo: window });
+
+    // Append the application canvas to the document body
+    document.getElementById("pixi-container").appendChild(app.canvas);
+
+    function createStar(x, y, size, color) {
+        const star = new Sprite(starTexture);
+        star.tint = color;
+        if (size < 1) size = 1;
+        star.width = size;
+        star.height = size;
+        star.anchor.set(0.5);
+        star.position.set(x, y);
+        star.alpha = Math.random();
+        if (star.alpha < 0.5) star.alpha = 0.5; // Ensure the star is visible
+        star.filters = [
+            new GlowFilter({ distance: 15, outerStrength: 2, color: star.tint })
+        ]
+        stars.push(star);
+        app.stage.addChild(star);
+    }
+
+    for (let i = 0; i < 500; i++) {
+        createStar(Math.random() * app.screen.width,
+            Math.random() * app.screen.height,
+            Math.random() * 10,
+            Math.random() * 0xffffff);
+    }
 
     await generateLevel(app, 0); // Generate the test level
 })();
