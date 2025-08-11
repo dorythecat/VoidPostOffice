@@ -340,15 +340,18 @@ const boxes = new Map(); // Store our boxes and their information
         // Quantum boxes
         if (quantumBoxes.length > 0) {
             if (timer > 3 && Math.random() < (timer - 3) / 1000) {
-                let randomBox = quantumBoxes[Math.floor(Math.random() * quantumBoxes.length)][0];
+                let randomBox = quantumBoxes[Math.floor(Math.random() * quantumBoxes.length)];
                 // Make sure we have an ungrabbed box or we'll fall into an infinite loop
                 while (randomBox === dragTarget && quantumBoxes.length > 1) {
-                    randomBox = quantumBoxes[Math.floor(Math.random() * quantumBoxes.length)][0];
+                    randomBox = quantumBoxes[Math.floor(Math.random() * quantumBoxes.length)];
                 }
-                randomBox.position.set(
-                    Math.random() * background.width + grid_offset_x - background.width / 10,
-                    Math.random() * background.height + grid_offset_y - background.height / 10,
+                randomBox[0].position.set(
+                    grid_offset_x + (Math.random() * 8 + 1) * (background.width / 10 + grid_spacing_x) + Math.random(),
+                    grid_offset_y + (Math.random() * 8 + 1)  * (background.height / 10 + grid_spacing_y) + Math.random()
                 );
+                randomBox[1].x = randomBox[0].position.x;
+                randomBox[1].y = randomBox[0].position.y;
+                app.stage.setChildIndex(randomBox[0], app.stage.children.length - 1);
             }
         }
 
