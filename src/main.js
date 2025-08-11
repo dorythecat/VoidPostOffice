@@ -23,9 +23,10 @@ const levelChances = [
     }
 ];
 
-// Tip: Try to keep them square if you want to actually make the game look decent enough
-let grid_size_x = 6;
-let grid_size_y = 6;
+// TIP: Try to keep them square if you want to actually make the game look decent enough
+// NOTE: The maximum size I'd recommend is 10x10, since from there on it might or might not break...
+let grid_size_x = 10;
+let grid_size_y = 10;
 
 // Actual game logic
 (async () => {
