@@ -213,6 +213,9 @@ const boxes = new Map(); // Store our boxes and their information
     const sinkingBoxes = Array.from(boxes).filter(([box, box_data]) =>
         box_data.type === "sinking" && dragTarget !== box
     );
+    const teleportingBoxes = Array.from(boxes).filter(([box, box_data]) =>
+        box_data.type === "teleporting" && dragTarget !== box
+    );
 
     while (lonelyBoxes.length % 3 !== 0) {
         let randomBox = Math.floor(Math.random() * lonelyBoxes.length);
@@ -331,6 +334,14 @@ const boxes = new Map(); // Store our boxes and their information
             box.position.x += Math.random() * 2 - 1;
             box.position.y += Math.random() * 2 - 1;
         });
+
+        // Teleporting boxes
+        if (Math.random() < timer / 1000) {
+            teleportingBoxes[Math.floor(Math.random() * teleportingBoxes.length)][0].position.set(
+                Math.random() * background.width + grid_offset_x - background.width / 10,
+                Math.random() * background.height + grid_offset_y - background.height / 10,
+            );
+        }
 
         // Delivery time!
         if (timer < 1) {
