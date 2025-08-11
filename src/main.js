@@ -28,8 +28,8 @@ const levelChances = [
 let grid_size_x = 4;
 let grid_size_y = 4;
 
-// Actual game logic
-(async () => {
+// Level generation function
+async function generateLevel() {
     // Create a new application
     const app = new Application();
 
@@ -65,9 +65,9 @@ let grid_size_y = 4;
 
     for (let i = 0; i < 500; i++) {
         createStar(Math.random() * app.screen.width,
-                   Math.random() * app.screen.height,
-                 Math.random() * 10,
-                Math.random() * 0xffffff);
+            Math.random() * app.screen.height,
+            Math.random() * 10,
+            Math.random() * 0xffffff);
     }
 
     // Add timer text
@@ -108,7 +108,7 @@ let grid_size_y = 4;
             placeholder_grid_element.height = background.height / (grid_size_y + 2);
             placeholder_grid_element.anchor.set(0.5);
             placeholder_grid_element.position.set(grid_offset_x + i * (background.width / (grid_size_x + 2) + grid_spacing_x),
-                                                  grid_offset_y + j * (background.height / (grid_size_y + 2) + grid_spacing_y));
+                grid_offset_y + j * (background.height / (grid_size_y + 2) + grid_spacing_y));
             app.stage.addChild(placeholder_grid_element);
 
             grid_elements.push(placeholder_grid_element);
@@ -220,8 +220,8 @@ let grid_size_y = 4;
             else if (Math.random() < levelChance.lonely) boxType = "lonely";
             else if (Math.random() < levelChance.quantum) boxType = "quantum";
             addBox(grid_offset_x + i * (background.width / (grid_size_x + 2) + grid_spacing_x),
-                   grid_offset_y + j * (background.height / (grid_size_y + 2) + grid_spacing_y),
-                 boxType);
+                grid_offset_y + j * (background.height / (grid_size_y + 2) + grid_spacing_y),
+                boxType);
         }
     }
 
@@ -245,7 +245,7 @@ let grid_size_y = 4;
         lonelyBoxes.splice(randomBox, 1);
     }
 
-    while (sinkingBoxes.length > grid_size_x) {
+    while (sinkingBoxes.length > 8) {
         let randomBox = Math.floor(Math.random() * sinkingBoxes.length);
         app.stage.removeChild(sinkingBoxes[randomBox][0]);
         boxes.delete(sinkingBoxes[randomBox][0]);
@@ -444,4 +444,9 @@ let grid_size_y = 4;
         timer -= delta.deltaMS / 1000;
         timerText.text = "00:" + (timer < 10 ? "0" : "") + Math.floor(timer);
     });
+}
+
+// Actual game logic
+(async () => {
+    await generateLevel();
 })();
