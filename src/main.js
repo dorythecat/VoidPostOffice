@@ -13,6 +13,7 @@ let level = 0; // What level are we playing right now?
 
 const levelChances = [
     {
+        general: 0.5,
         normal: 1.0,
         floating: 0.0,
         lonely: 0.0,
@@ -201,11 +202,11 @@ const levelChances = [
         boxes.set(box, { x: x, y: y, type: type });
     }
 
+    let levelChance = levelChances[level];
     for (let i = 1; i < 9; i++) {
         for (let j = 1; j < 9; j++) {
-            if (Math.random() < 0.5) continue;
+            if (Math.random() < levelChance.general) continue;
             let boxType = "";
-            let levelChance = levelChances[level];
             if (Math.random() < levelChance.normal) boxType = "normal";
             else if (Math.random() < levelChance.floating) boxType = "floating";
             else if (Math.random() < levelChance.sinking) boxType = "sinking";
