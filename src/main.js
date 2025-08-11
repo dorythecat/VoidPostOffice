@@ -347,6 +347,12 @@ function generateLevel(app, level, timerText, background) {
                 break;
             }
 
+            for (let [box, box_data] of sinkingBoxes) {
+                if (box.y === box_data.y) continue;
+                won = false;
+                break;
+            }
+
             for (let [box, box_data] of lonelyBoxes) {
                 if (box.y !== box_data.y) {
                     won = false;
