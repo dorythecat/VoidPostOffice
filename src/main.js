@@ -17,11 +17,15 @@ const levelChances = [
         general: 0.5, // Chance of a box being placed in any cell at all
         normal: 1.0,
         floating: 0.0,
-        lonely: 0.0,
         sinking: 0.0,
+        lonely: 0.0,
         quantum: 0.0
     }
 ];
+
+// Tip: Try to keep them square if you want to actually make the game look decent enough
+let grid_size_x = 6;
+let grid_size_y = 6;
 
 // Actual game logic
 (async () => {
@@ -92,18 +96,18 @@ const levelChances = [
     background.opacity = 0.5;
     app.stage.addChild(background);
 
-    const grid_offset_x = window.innerWidth / 2 - background.width / 2 + background.width / 20 - grid_spacing_x * 4;
-    const grid_offset_y = window.innerHeight / 2 - background.height / 2 + background.height / 20 - grid_spacing_y * 4;
+    const grid_offset_x = window.innerWidth / 2 - background.width / 2 + background.width / (2 * grid_size_x + 4) - grid_spacing_x * grid_size_x / 2;
+    const grid_offset_y = window.innerHeight / 2 - background.height / 2 + background.height / (2 * grid_size_y + 4) - grid_spacing_y * grid_size_y / 2;
     let grid_elements = [];
-    for (let i = 1; i < 9; i++) {
-        for (let j = 1; j < 9; j++) {
+    for (let i = 1; i < grid_size_x + 1; i++) {
+        for (let j = 1; j < grid_size_y + 1; j++) {
             const placeholder_grid_element = new Sprite(Texture.WHITE);
             placeholder_grid_element.tint = 0x333333;
-            placeholder_grid_element.width = background.width / 10;
-            placeholder_grid_element.height = background.height / 10;
+            placeholder_grid_element.width = background.width / (grid_size_x + 2);
+            placeholder_grid_element.height = background.height / (grid_size_y + 2);
             placeholder_grid_element.anchor.set(0.5);
-            placeholder_grid_element.position.set(grid_offset_x + i * (background.width / 10 + grid_spacing_x),
-                                                  grid_offset_y + j * (background.height / 10 + grid_spacing_y));
+            placeholder_grid_element.position.set(grid_offset_x + i * (background.width / (grid_size_x + 2) + grid_spacing_x),
+                                                  grid_offset_y + j * (background.height / (grid_size_y + 2) + grid_spacing_y));
             app.stage.addChild(placeholder_grid_element);
 
             grid_elements.push(placeholder_grid_element);
@@ -121,8 +125,8 @@ const levelChances = [
         if (dragTarget) {
             dragTarget.parent.toLocal(event.global, null, dragTarget.position);
 
-            let x = window.innerWidth / 2 - background.getBounds().width / 2 + background.width / 20;
-            let y = window.innerHeight / 2 - background.getBounds().height / 2 + background.height / 20;
+            let x = window.innerWidth / 2 - background.getBounds().width / 2 + background.width / (2 * grid_size_x + 4);
+            let y = window.innerHeight / 2 - background.getBounds().height / 2 + background.height / (2 * grid_size_x + 4);
 
             if (dragTarget.position.x < x) dragTarget.position.x = x;
             else if (dragTarget.position.x > window.innerWidth - x) dragTarget.position.x = window.innerWidth - x;
@@ -144,8 +148,8 @@ const levelChances = [
 
     function inCell(box, cell) {
         return (
-            20 * Math.abs(box.position.x - cell.position.x) < background.width &&
-            20 * Math.abs(box.position.y - cell.position.y) < background.height
+            (2 * grid_size_x + 4) * Math.abs(box.position.x - cell.position.x) < background.width &&
+            (2 * grid_size_y + 4) * Math.abs(box.position.y - cell.position.y) < background.height
         )
     }
 
@@ -156,7 +160,7 @@ const levelChances = [
 
             // Get all the grid elements in the same column as the dragTarget
             let grid_elements_x = grid_elements.filter(element => (
-                20 * Math.abs(element.position.x - dragTarget.position.x) < background.width
+                (2 * grid_size_x + 4) * Math.abs(element.position.x - dragTarget.position.x) < background.width
             ));
             for (let i = 0; i < grid_elements_x.length; i++) {
                 // Check if the dragTarget is within grid_margin pixels of the grid_element
@@ -180,8 +184,8 @@ const levelChances = [
     function addBox(x, y, type = "normal") {
         // Create a box Sprite
         const box = new Sprite(boxTexture);
-        box.width = background.width / 10;
-        box.height = background.height / 10;
+        box.width = background.width / (grid_size_x + 2);
+        box.height = background.height / (grid_size_y + 2);
         box.cursor = "pointer";
         box.eventMode = "static";
         if (type === "floating") box.tint = 0xaa0000;
@@ -204,8 +208,8 @@ const levelChances = [
     }
 
     let levelChance = levelChances[level];
-    for (let i = 1; i < 9; i++) {
-        for (let j = 1; j < 9; j++) {
+    for (let i = 1; i < grid_size_x + 1; i++) {
+        for (let j = 1; j < grid_size_y + 1; j++) {
             if (Math.random() > levelChance.general) continue;
             let boxType = "";
             // TODO: Fix chances to actually be the ones that we put in the settings
@@ -214,8 +218,8 @@ const levelChances = [
             else if (Math.random() < levelChance.sinking) boxType = "sinking";
             else if (Math.random() < levelChance.lonely) boxType = "lonely";
             else if (Math.random() < levelChance.quantum) boxType = "quantum";
-            addBox(grid_offset_x + i * (background.width / 10 + grid_spacing_x),
-                   grid_offset_y + j * (background.height / 10 + grid_spacing_y),
+            addBox(grid_offset_x + i * (background.width / (grid_size_x + 2) + grid_spacing_x),
+                   grid_offset_y + j * (background.height / (grid_size_y + 2) + grid_spacing_y),
                  boxType);
         }
     }
@@ -249,8 +253,8 @@ const levelChances = [
 
     function checkCollision(box1, box2, margin_y = 0) {
         return ( // We only check the y dimensions because the x dimensions should be checked by the preceding code
-            box1.y < box2.y + background.height / 10 + margin_y &&
-            box1.y + background.height / 10 + margin_y > box2.y
+            box1.y < box2.y + background.height / (grid_size_x + 2) + margin_y &&
+            box1.y + background.height / (grid_size_y + 2) + margin_y > box2.y
         );
     }
 
@@ -362,8 +366,8 @@ const levelChances = [
                     randomBox = quantumBoxes[Math.floor(Math.random() * quantumBoxes.length)];
                 }
                 randomBox[0].position.set(
-                    grid_offset_x + (Math.random() * 8 + 1) * (background.width / 10 + grid_spacing_x),
-                    grid_offset_y + (Math.random() * 8 + 1)  * (background.height / 10 + grid_spacing_y)
+                    grid_offset_x + (Math.random() * 8 + 1) * (background.width / (grid_size_x + 2) + grid_spacing_x),
+                    grid_offset_y + (Math.random() * 8 + 1)  * (background.height / (grid_size_y + 2) + grid_spacing_y)
                 );
                 randomBox[1].x = randomBox[0].position.x;
                 randomBox[1].y = randomBox[0].position.y;
