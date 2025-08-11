@@ -313,8 +313,6 @@ const boxes = new Map(); // Store our boxes and their information
 
         // Make lonely boxes shake
         lonelyBoxes.forEach(([box, box_data]) => {
-            if (dragTarget === box) return;
-
             // Detect how many neighbours the lonely box has
             let neighbours = 0;
             for (let [otherBox, otherBox_data] of lonelyBoxes) {
