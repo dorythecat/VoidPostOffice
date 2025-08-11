@@ -37,6 +37,8 @@ The precautions are:
 - Sinking boxes (green) cannot be placed above any other box, not even other
   sinking boxes, due to disruption of cargo during [[REDACTED]]. Be especially
   careful of putting sinking boxes atop floating boxes, as they might [[REDACTED]].
+- Be careful with quantum boxes! They might teleport randomly at any moment! It does
+  seem like they tire as time goes though...
 
 # How to run the game?
 To run the game in your own computer, you will need to have

@@ -336,7 +336,7 @@ const boxes = new Map(); // Store our boxes and their information
         });
 
         // Teleporting boxes
-        if (Math.random() < timer / 1000) {
+        if (timer > 3 && Math.random() < (timer - 3) / 1000) {
             teleportingBoxes[Math.floor(Math.random() * teleportingBoxes.length)][0].position.set(
                 Math.random() * background.width + grid_offset_x - background.width / 10,
                 Math.random() * background.height + grid_offset_y - background.height / 10,
