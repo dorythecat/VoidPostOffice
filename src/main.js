@@ -11,6 +11,10 @@ const boxes = new Map(); // Store our boxes and their information
 // --- LEVEL CONFIG ---
 const levelSettings = [
     {
+        // TIP: Try to keep them square if you want to actually make the game look decent enough
+        // NOTE: The maximum size I'd recommend is 10x10, since from there on it might or might not break...
+        grid_size_x: 4,
+        grid_size_y: 4,
         time: 60, // Time to solve the level, in seconds
         general: 0.5, // Chance of a box being placed in any cell at all
         normal: 1.0,
@@ -20,11 +24,6 @@ const levelSettings = [
         quantum: 0.0
     }
 ];
-
-// TIP: Try to keep them square if you want to actually make the game look decent enough
-// NOTE: The maximum size I'd recommend is 10x10, since from there on it might or might not break...
-let grid_size_x = 4;
-let grid_size_y = 4;
 
 // --- GLOBAL ASSETS ---
 // Load textures
@@ -36,6 +35,9 @@ await Assets.load('/assets/fonts/alagard.ttf');
 
 // --- LEVEL GENERATION ---
 function generateLevel(app, level) {
+    // Load settings for the current level
+    let currentLevelSettings = levelSettings[level];
+
     // Append the application canvas to the document body
     document.getElementById("pixi-container").appendChild(app.canvas);
 
@@ -90,18 +92,24 @@ function generateLevel(app, level) {
     background.opacity = 0.5;
     app.stage.addChild(background);
 
-    const grid_offset_x = window.innerWidth / 2 - background.width / 2 + background.width / (2 * grid_size_x + 4) - grid_spacing_x * grid_size_x / 2;
-    const grid_offset_y = window.innerHeight / 2 - background.height / 2 + background.height / (2 * grid_size_y + 4) - grid_spacing_y * grid_size_y / 2;
+    const grid_offset_x = (
+        window.innerWidth / 2 - background.width / 2 + background.width / (2 * currentLevelSettings.grid_size_x + 4) -
+        grid_spacing_x * currentLevelSettings.grid_size_x / 2
+    );
+    const grid_offset_y = (
+        window.innerHeight / 2 - background.height / 2 + background.height / (2 * currentLevelSettings.grid_size_y + 4) -
+        grid_spacing_y * currentLevelSettings.grid_size_y / 2
+    );
     let grid_elements = [];
-    for (let i = 1; i < grid_size_x + 1; i++) {
-        for (let j = 1; j < grid_size_y + 1; j++) {
+    for (let i = 1; i < currentLevelSettings.grid_size_x + 1; i++) {
+        for (let j = 1; j < currentLevelSettings.grid_size_y + 1; j++) {
             const placeholder_grid_element = new Sprite(Texture.WHITE);
             placeholder_grid_element.tint = 0x333333;
-            placeholder_grid_element.width = background.width / (grid_size_x + 2);
-            placeholder_grid_element.height = background.height / (grid_size_y + 2);
+            placeholder_grid_element.width = background.width / (currentLevelSettings.grid_size_x + 2);
+            placeholder_grid_element.height = background.height / (currentLevelSettings.grid_size_y + 2);
             placeholder_grid_element.anchor.set(0.5);
-            placeholder_grid_element.position.set(grid_offset_x + i * (background.width / (grid_size_x + 2) + grid_spacing_x),
-                grid_offset_y + j * (background.height / (grid_size_y + 2) + grid_spacing_y));
+            placeholder_grid_element.position.set(grid_offset_x + i * (background.width / (currentLevelSettings.grid_size_x + 2) + grid_spacing_x),
+                grid_offset_y + j * (background.height / (currentLevelSettings.grid_size_y + 2) + grid_spacing_y));
             app.stage.addChild(placeholder_grid_element);
 
             grid_elements.push(placeholder_grid_element);
@@ -119,8 +127,8 @@ function generateLevel(app, level) {
         if (!dragTarget) return; // Nothing to do
         
         dragTarget.parent.toLocal(event.global, null, dragTarget.position);
-        let x = window.innerWidth / 2 - background.getBounds().width / 2 + background.width / (2 * grid_size_x + 4);
-        let y = window.innerHeight / 2 - background.getBounds().height / 2 + background.height / (2 * grid_size_x + 4);
+        let x = window.innerWidth / 2 - background.getBounds().width / 2 + background.width / (2 * currentLevelSettings.grid_size_x + 4);
+        let y = window.innerHeight / 2 - background.getBounds().height / 2 + background.height / (2 * currentLevelSettings.grid_size_x + 4);
         if (dragTarget.position.x < x) dragTarget.position.x = x;
         else if (dragTarget.position.x > window.innerWidth - x) dragTarget.position.x = window.innerWidth - x;
         if (dragTarget.position.y < y) dragTarget.position.y = y;
@@ -139,8 +147,8 @@ function generateLevel(app, level) {
 
     function inCell(box, cell) {
         return (
-            (2 * grid_size_x + 4) * Math.abs(box.position.x - cell.position.x) < background.width &&
-            (2 * grid_size_y + 4) * Math.abs(box.position.y - cell.position.y) < background.height
+            (2 * currentLevelSettings.grid_size_x + 4) * Math.abs(box.position.x - cell.position.x) < background.width &&
+            (2 * currentLevelSettings.grid_size_y + 4) * Math.abs(box.position.y - cell.position.y) < background.height
         )
     }
 
@@ -150,7 +158,7 @@ function generateLevel(app, level) {
         app.stage.off('pointermove', onDragMove);
         dragTarget.alpha = 1;
         let grid_elements_x = grid_elements.filter(element => (
-            (2 * grid_size_x + 4) * Math.abs(element.position.x - dragTarget.position.x) < background.width
+            (2 * currentLevelSettings.grid_size_x + 4) * Math.abs(element.position.x - dragTarget.position.x) < background.width
         ));
         for (let i = 0; i < grid_elements_x.length; i++) {
             // Check if the dragTarget is within grid_margin pixels of the grid_element
@@ -171,8 +179,8 @@ function generateLevel(app, level) {
     function addBox(x, y, type = "normal") {
         // Create a box Sprite
         const box = new Sprite(boxTexture);
-        box.width = background.width / (grid_size_x + 2);
-        box.height = background.height / (grid_size_y + 2);
+        box.width = background.width / (currentLevelSettings.grid_size_x + 2);
+        box.height = background.height / (currentLevelSettings.grid_size_y + 2);
         box.cursor = "pointer";
         box.eventMode = "static";
         if (type === "floating") box.tint = 0xaa0000;
@@ -194,9 +202,8 @@ function generateLevel(app, level) {
         boxes.set(box, { x: x, y: y, type: type });
     }
 
-    let currentLevelSettings = levelSettings[level];
-    for (let i = 1; i < grid_size_x + 1; i++) {
-        for (let j = 1; j < grid_size_y + 1; j++) {
+    for (let i = 1; i < currentLevelSettings.grid_size_x + 1; i++) {
+        for (let j = 1; j < currentLevelSettings.grid_size_y + 1; j++) {
             if (Math.random() > currentLevelSettings.general) continue;
             let boxType = "";
             // TODO: Fix chances to actually be the ones that we put in the settings
@@ -205,8 +212,8 @@ function generateLevel(app, level) {
             else if (Math.random() < currentLevelSettings.sinking) boxType = "sinking";
             else if (Math.random() < currentLevelSettings.lonely) boxType = "lonely";
             else if (Math.random() < currentLevelSettings.quantum) boxType = "quantum";
-            addBox(grid_offset_x + i * (background.width / (grid_size_x + 2) + grid_spacing_x),
-                grid_offset_y + j * (background.height / (grid_size_y + 2) + grid_spacing_y),
+            addBox(grid_offset_x + i * (background.width / (currentLevelSettings.grid_size_x + 2) + grid_spacing_x),
+                grid_offset_y + j * (background.height / (currentLevelSettings.grid_size_y + 2) + grid_spacing_y),
                 boxType);
         }
     }
@@ -240,8 +247,8 @@ function generateLevel(app, level) {
 
     function checkCollision(box1, box2, margin_y = 0) {
         return ( // We only check the y dimensions because the x dimensions should be checked by the preceding code
-            box1.y < box2.y + background.height / (grid_size_x + 2) + margin_y &&
-            box1.y + background.height / (grid_size_y + 2) + margin_y > box2.y
+            box1.y < box2.y + background.height / (currentLevelSettings.grid_size_x + 2) + margin_y &&
+            box1.y + background.height / (currentLevelSettings.grid_size_y + 2) + margin_y > box2.y
         );
     }
 
@@ -353,8 +360,8 @@ function generateLevel(app, level) {
                     randomBox = quantumBoxes[Math.floor(Math.random() * quantumBoxes.length)];
                 }
                 randomBox[0].position.set(
-                    grid_offset_x + (Math.random() * grid_size_x + 1) * (background.width / (grid_size_x + 2) + grid_spacing_x),
-                    grid_offset_y + (Math.random() * grid_size_y + 1)  * (background.height / (grid_size_y + 2) + grid_spacing_y)
+                    grid_offset_x + (Math.random() * currentLevelSettings.grid_size_x + 1) * (background.width / (currentLevelSettings.grid_size_x + 2) + grid_spacing_x),
+                    grid_offset_y + (Math.random() * currentLevelSettings.grid_size_y + 1)  * (background.height / (currentLevelSettings.grid_size_y + 2) + grid_spacing_y)
                 );
                 randomBox[1].x = randomBox[0].position.x;
                 randomBox[1].y = randomBox[0].position.y;
@@ -387,7 +394,7 @@ function generateLevel(app, level) {
                 for (let [otherBox, _] of boxes) {
                     if (otherBox === box) continue;
                     if (box.x !== otherBox.x) continue;
-                    if (box.y + background.height / (grid_size_y + 2) + grid_spacing_y > otherBox.y) {
+                    if (box.y + background.height / (currentLevelSettings.grid_size_y + 2) + grid_spacing_y > otherBox.y) {
                         canContinue = true;
                         break;
                     }
