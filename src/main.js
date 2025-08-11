@@ -9,6 +9,19 @@ const grid_spacing_y = 10;
 const stars = []; // Store our stars
 const boxes = new Map(); // Store our boxes and their information
 
+let level = 0; // What level are we playing right now?
+
+const levelChances = [
+    {
+        normal: 1.0,
+        floating: 0.0,
+        lonely: 0.0,
+        sinking: 0.0,
+        quantum: 0.0
+    }
+];
+
+// Actual game logic
 (async () => {
     // Create a new application
     const app = new Application();
@@ -191,13 +204,13 @@ const boxes = new Map(); // Store our boxes and their information
     for (let i = 1; i < 9; i++) {
         for (let j = 1; j < 9; j++) {
             if (Math.random() < 0.5) continue;
-            let randomNumber = Math.random();
             let boxType = "";
-            if (randomNumber < 0.3) boxType = "normal";
-            else if (randomNumber < 0.5) boxType = "floating";
-            else if (randomNumber < 0.7) boxType = "sinking";
-            else if (randomNumber < 0.9) boxType = "lonely";
-            else if (0.9 < randomNumber) boxType = "quantum";
+            let levelChance = levelChances[level];
+            if (Math.random() < levelChance.normal) boxType = "normal";
+            else if (Math.random() < levelChance.floating) boxType = "floating";
+            else if (Math.random() < levelChance.sinking) boxType = "sinking";
+            else if (Math.random() < levelChance.lonely) boxType = "lonely";
+            else if (Math.random() < levelChance.quantum) boxType = "quantum";
             addBox(grid_offset_x + i * (background.width / 10 + grid_spacing_x),
                    grid_offset_y + j * (background.height / 10 + grid_spacing_y),
                  boxType);
