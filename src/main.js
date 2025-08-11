@@ -346,8 +346,8 @@ const boxes = new Map(); // Store our boxes and their information
                     randomBox = quantumBoxes[Math.floor(Math.random() * quantumBoxes.length)];
                 }
                 randomBox[0].position.set(
-                    grid_offset_x + (Math.random() * 8 + 1) * (background.width / 10 + grid_spacing_x) + Math.random(),
-                    grid_offset_y + (Math.random() * 8 + 1)  * (background.height / 10 + grid_spacing_y) + Math.random()
+                    grid_offset_x + (Math.random() * 8 + 1) * (background.width / 10 + grid_spacing_x),
+                    grid_offset_y + (Math.random() * 8 + 1)  * (background.height / 10 + grid_spacing_y)
                 );
                 randomBox[1].x = randomBox[0].position.x;
                 randomBox[1].y = randomBox[0].position.y;
