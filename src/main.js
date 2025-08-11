@@ -13,6 +13,7 @@ let level = 0; // What level are we playing right now?
 
 const levelChances = [
     {
+        time: 60, // Time to solve the level, in seconds
         general: 0.5, // Chance of a box being placed in any cell at all
         normal: 1.0,
         floating: 0.0,
@@ -273,7 +274,7 @@ const levelChances = [
 
 
     // Main game loop
-    let timer = 60;
+    let timer = levelChances[level].time;
     let lonelyCounter = 0;
     app.ticker.add((delta) => {
         for (let [box, box_data] of floatingBoxes) {
