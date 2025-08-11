@@ -225,16 +225,16 @@ let grid_size_y = 10;
         }
     }
 
-    const floatingBoxes = Array.from(boxes).filter(([box, box_data]) =>
+    const floatingBoxes = Array.from(boxes).filter(([_, box_data]) =>
         box_data.type === "floating"
     );
-    const lonelyBoxes = Array.from(boxes).filter(([box, box_data]) =>
+    const lonelyBoxes = Array.from(boxes).filter(([_, box_data]) =>
         box_data.type === "lonely"
     );
-    const sinkingBoxes = Array.from(boxes).filter(([box, box_data]) =>
+    const sinkingBoxes = Array.from(boxes).filter(([_, box_data]) =>
         box_data.type === "sinking"
     );
-    const quantumBoxes = Array.from(boxes).filter(([box, box_data]) =>
+    const quantumBoxes = Array.from(boxes).filter(([_, box_data]) =>
         box_data.type === "quantum"
     );
 
