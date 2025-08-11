@@ -13,12 +13,12 @@ let level = 0; // What level are we playing right now?
 
 const levelChances = [
     {
-        general: 0.5,
-        normal: 1.0,
+        general: 0.5, // Chance of a box being placed in any cell at all
+        normal: 0.9,
         floating: 0.0,
         lonely: 0.0,
         sinking: 0.0,
-        quantum: 0.0
+        quantum: 0.1
     }
 ];
 
