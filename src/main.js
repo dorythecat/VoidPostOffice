@@ -14,11 +14,11 @@ let level = 0; // What level are we playing right now?
 const levelChances = [
     {
         general: 0.5, // Chance of a box being placed in any cell at all
-        normal: 0.9,
+        normal: 1.0,
         floating: 0.0,
         lonely: 0.0,
         sinking: 0.0,
-        quantum: 0.1
+        quantum: 0.0
     }
 ];
 
@@ -205,8 +205,9 @@ const levelChances = [
     let levelChance = levelChances[level];
     for (let i = 1; i < 9; i++) {
         for (let j = 1; j < 9; j++) {
-            if (Math.random() < levelChance.general) continue;
+            if (Math.random() > levelChance.general) continue;
             let boxType = "";
+            // TODO: Fix chances to actually be the ones that we put in the settings
             if (Math.random() < levelChance.normal) boxType = "normal";
             else if (Math.random() < levelChance.floating) boxType = "floating";
             else if (Math.random() < levelChance.sinking) boxType = "sinking";
