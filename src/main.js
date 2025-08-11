@@ -34,36 +34,9 @@ const boxTexture = await Assets.load("/assets/boxes/box_1.png");
 await Assets.load('/assets/fonts/alagard.ttf');
 
 // --- LEVEL GENERATION ---
-function generateLevel(app, level) {
+function generateLevel(app, level, timerText, background) {
     // Load settings for the current level
     let currentLevelSettings = levelSettings[level];
-
-    // Add timer text
-    const timerText = new BitmapText({
-        text: '01:00',
-        style: {
-            fontFamily: 'alagard',
-            fontSize: 64,
-            fill: '#c0c0c0',
-            stroke: {
-                color: '#eeeeee',
-                width: 2
-            }
-        }
-    });
-
-    timerText.anchor.set(0.5);
-    timerText.position.set(app.screen.width / 5, app.screen.height / 7);
-    app.stage.addChild(timerText);
-
-    const background = new Sprite(Texture.WHITE);
-    background.width = Math.min(app.screen.height, app.screen.width) - 100;
-    background.height = Math.min(app.screen.height, app.screen.width) - 100;
-    background.anchor.set(0.5);
-    background.position.set(app.screen.width / 2, app.screen.height / 2);
-    background.tint = 0xc0c0c0;
-    background.opacity = 0.5;
-    app.stage.addChild(background);
 
     const grid_offset_x = (
         window.innerWidth / 2 - background.width / 2 + background.width / (2 * currentLevelSettings.grid_size_x + 4) -
@@ -447,5 +420,33 @@ function generateLevel(app, level) {
             Math.random() * 0xffffff);
     }
 
-    generateLevel(app, 0); // Generate the test level
+    // Add timer text
+    const timerText = new BitmapText({
+        text: '01:00',
+        style: {
+            fontFamily: 'alagard',
+            fontSize: 64,
+            fill: '#c0c0c0',
+            stroke: {
+                color: '#eeeeee',
+                width: 2
+            }
+        }
+    });
+
+    timerText.anchor.set(0.5);
+    timerText.position.set(app.screen.width / 5, app.screen.height / 7);
+    app.stage.addChild(timerText);
+
+    // Generate the background
+    const background = new Sprite(Texture.WHITE);
+    background.width = Math.min(app.screen.height, app.screen.width) - 100;
+    background.height = Math.min(app.screen.height, app.screen.width) - 100;
+    background.anchor.set(0.5);
+    background.position.set(app.screen.width / 2, app.screen.height / 2);
+    background.tint = 0xc0c0c0;
+    background.opacity = 0.5;
+    app.stage.addChild(background);
+
+    generateLevel(app, 0, timerText, background); // Generate the test level
 })();
