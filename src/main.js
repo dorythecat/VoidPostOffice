@@ -15,7 +15,7 @@ const levelSettings = [
         // NOTE: The maximum size I'd recommend is 10x10, since from there on it might or might not break...
         grid_size_x: 4,
         grid_size_y: 4,
-        time: 60, // Time to solve the level, in seconds
+        time: 10, // Time to solve the level, in seconds
         general: 0.5, // Chance of a box being placed in any cell at all
         normal: 1.0,
         floating: 0.0,
