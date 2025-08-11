@@ -25,8 +25,8 @@ const levelChances = [
 
 // TIP: Try to keep them square if you want to actually make the game look decent enough
 // NOTE: The maximum size I'd recommend is 10x10, since from there on it might or might not break...
-let grid_size_x = 10;
-let grid_size_y = 10;
+let grid_size_x = 4;
+let grid_size_y = 4;
 
 // Actual game logic
 (async () => {
@@ -245,7 +245,7 @@ let grid_size_y = 10;
         lonelyBoxes.splice(randomBox, 1);
     }
 
-    while (sinkingBoxes.length > 8) {
+    while (sinkingBoxes.length > grid_size_x) {
         let randomBox = Math.floor(Math.random() * sinkingBoxes.length);
         app.stage.removeChild(sinkingBoxes[randomBox][0]);
         boxes.delete(sinkingBoxes[randomBox][0]);
@@ -367,8 +367,8 @@ let grid_size_y = 10;
                     randomBox = quantumBoxes[Math.floor(Math.random() * quantumBoxes.length)];
                 }
                 randomBox[0].position.set(
-                    grid_offset_x + (Math.random() * 8 + 1) * (background.width / (grid_size_x + 2) + grid_spacing_x),
-                    grid_offset_y + (Math.random() * 8 + 1)  * (background.height / (grid_size_y + 2) + grid_spacing_y)
+                    grid_offset_x + (Math.random() * grid_size_x + 1) * (background.width / (grid_size_x + 2) + grid_spacing_x),
+                    grid_offset_y + (Math.random() * grid_size_y + 1)  * (background.height / (grid_size_y + 2) + grid_spacing_y)
                 );
                 randomBox[1].x = randomBox[0].position.x;
                 randomBox[1].y = randomBox[0].position.y;
@@ -401,7 +401,7 @@ let grid_size_y = 10;
                 for (let [otherBox, _] of boxes) {
                     if (otherBox === box) continue;
                     if (box.x !== otherBox.x) continue;
-                    if (box.y + background.height / 10 + grid_spacing_y > otherBox.y) {
+                    if (box.y + background.height / (grid_size_y + 2) + grid_spacing_y > otherBox.y) {
                         canContinue = true;
                         break;
                     }
