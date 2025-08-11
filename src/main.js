@@ -205,16 +205,16 @@ const boxes = new Map(); // Store our boxes and their information
     }
 
     const floatingBoxes = Array.from(boxes).filter(([box, box_data]) =>
-        box_data.type === "floating" && dragTarget !== box
+        box_data.type === "floating"
     );
     const lonelyBoxes = Array.from(boxes).filter(([box, box_data]) =>
-        box_data.type === "lonely" && dragTarget !== box
+        box_data.type === "lonely"
     );
     const sinkingBoxes = Array.from(boxes).filter(([box, box_data]) =>
-        box_data.type === "sinking" && dragTarget !== box
+        box_data.type === "sinking"
     );
     const quantumBoxes = Array.from(boxes).filter(([box, box_data]) =>
-        box_data.type === "quantum" && dragTarget !== box
+        box_data.type === "quantum"
     );
 
     while (lonelyBoxes.length % 3 !== 0) {
@@ -316,6 +316,8 @@ const boxes = new Map(); // Store our boxes and their information
 
         // Make lonely boxes shake
         lonelyBoxes.forEach(([box, box_data]) => {
+            if (box === dragTarget) return;
+
             // Detect how many neighbours the lonely box has
             let neighbours = 0;
             for (let [otherBox, otherBox_data] of lonelyBoxes) {
