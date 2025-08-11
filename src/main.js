@@ -172,6 +172,7 @@ const boxes = new Map(); // Store our boxes and their information
         if (type === "floating") box.tint = 0xaa0000;
         else if (type === "lonely") box.tint = 0x101010;
         else if (type === "sinking") box.tint = 0x00aa00;
+        else if (type === "teleporting") box.tint = 0x0000aa;
         box.on('pointerdown', onDragStart, box);
 
         // Center the sprite's anchor point
@@ -190,7 +191,13 @@ const boxes = new Map(); // Store our boxes and their information
     for (let i = 1; i < 9; i++) {
         for (let j = 1; j < 9; j++) {
             if (Math.random() < 0.5) continue;
-            let boxType = Math.random() < 0.5 ? (Math.random() < 0.5 ? "normal" : "lonely") : (Math.random() < 0.5 ? "floating" : "sinking");
+            let randomNumber = Math.random();
+            let boxType = "";
+            if (randomNumber < 0.3) boxType = "normal";
+            else if (randomNumber < 0.5) boxType = "floating";
+            else if (randomNumber < 0.7) boxType = "sinking";
+            else if (randomNumber < 0.9) boxType = "lonely";
+            else if (0.9 < randomNumber) boxType = "teleporting";
             addBox(grid_offset_x + i * (background.width / 10 + grid_spacing_x),
                    grid_offset_y + j * (background.height / 10 + grid_spacing_y),
                  boxType);
