@@ -9,7 +9,7 @@ const stars = []; // Store our stars
 const boxes = new Map(); // Store our boxes and their information
 
 // --- LEVEL CONFIG ---
-const levelChances = [
+const levelSettings = [
     {
         time: 60, // Time to solve the level, in seconds
         general: 0.5, // Chance of a box being placed in any cell at all
@@ -108,26 +108,23 @@ function generateLevel(app, level) {
         }
     }
 
-    let dragTarget = null;
-
     app.stage.eventMode = 'static';
     app.stage.hitArea = app.screen;
     app.stage.on('pointerup', onDragEnd);
     app.stage.on('pointerupoutside', onDragEnd);
 
+    // Dragging functions
+    let dragTarget = null;
     function onDragMove(event) {
-        if (dragTarget) {
-            dragTarget.parent.toLocal(event.global, null, dragTarget.position);
-
-            let x = window.innerWidth / 2 - background.getBounds().width / 2 + background.width / (2 * grid_size_x + 4);
-            let y = window.innerHeight / 2 - background.getBounds().height / 2 + background.height / (2 * grid_size_x + 4);
-
-            if (dragTarget.position.x < x) dragTarget.position.x = x;
-            else if (dragTarget.position.x > window.innerWidth - x) dragTarget.position.x = window.innerWidth - x;
-
-            if (dragTarget.position.y < y) dragTarget.position.y = y;
-            else if (dragTarget.position.y > window.innerHeight - y) dragTarget.position.y = window.innerHeight - y;
-        }
+        if (!dragTarget) return; // Nothing to do
+        
+        dragTarget.parent.toLocal(event.global, null, dragTarget.position);
+        let x = window.innerWidth / 2 - background.getBounds().width / 2 + background.width / (2 * grid_size_x + 4);
+        let y = window.innerHeight / 2 - background.getBounds().height / 2 + background.height / (2 * grid_size_x + 4);
+        if (dragTarget.position.x < x) dragTarget.position.x = x;
+        else if (dragTarget.position.x > window.innerWidth - x) dragTarget.position.x = window.innerWidth - x;
+        if (dragTarget.position.y < y) dragTarget.position.y = y;
+        else if (dragTarget.position.y > window.innerHeight - y) dragTarget.position.y = window.innerHeight - y;
     }
 
     function onDragStart() {
@@ -148,31 +145,27 @@ function generateLevel(app, level) {
     }
 
     function onDragEnd() {
-        if (dragTarget) {
-            app.stage.off('pointermove', onDragMove);
-            dragTarget.alpha = 1;
-
-            // Get all the grid elements in the same column as the dragTarget
-            let grid_elements_x = grid_elements.filter(element => (
-                (2 * grid_size_x + 4) * Math.abs(element.position.x - dragTarget.position.x) < background.width
-            ));
-            for (let i = 0; i < grid_elements_x.length; i++) {
-                // Check if the dragTarget is within grid_margin pixels of the grid_element
-                if (inCell(dragTarget, grid_elements_x[i])) {
-                    // Make it so two boxes can't be placed on top of each other
-                    for (let [box, _] of boxes) {
-                        if (box === dragTarget) continue;
-                        if (inCell(box, grid_elements_x[i])) return;
-                    }
-                    dragTarget.position.set(grid_elements_x[i].position.x, grid_elements_x[i].position.y);
-                    boxes.get(dragTarget).x = dragTarget.position.x;
-                    boxes.get(dragTarget).y = dragTarget.position.y;
-                    break;
-                }
+        if (!dragTarget) return; // Nothing to do
+        
+        app.stage.off('pointermove', onDragMove);
+        dragTarget.alpha = 1;
+        let grid_elements_x = grid_elements.filter(element => (
+            (2 * grid_size_x + 4) * Math.abs(element.position.x - dragTarget.position.x) < background.width
+        ));
+        for (let i = 0; i < grid_elements_x.length; i++) {
+            // Check if the dragTarget is within grid_margin pixels of the grid_element
+            if (!inCell(dragTarget, grid_elements_x[i])) continue;
+            
+            // Make it so two boxes can't be placed on top of each other
+            for (let [box, _] of boxes) {
+                if (box === dragTarget) continue;
+                if (inCell(box, grid_elements_x[i])) return;
             }
-
-            dragTarget = null;
-        }
+            dragTarget.position.set(grid_elements_x[i].position.x, grid_elements_x[i].position.y);
+            boxes.get(dragTarget).x = dragTarget.position.x;
+            boxes.get(dragTarget).y = dragTarget.position.y;
+            break;
+        } dragTarget = null;
     }
 
     function addBox(x, y, type = "normal") {
@@ -201,17 +194,17 @@ function generateLevel(app, level) {
         boxes.set(box, { x: x, y: y, type: type });
     }
 
-    let levelChance = levelChances[level];
+    let currentLevelSettings = levelSettings[level];
     for (let i = 1; i < grid_size_x + 1; i++) {
         for (let j = 1; j < grid_size_y + 1; j++) {
-            if (Math.random() > levelChance.general) continue;
+            if (Math.random() > currentLevelSettings.general) continue;
             let boxType = "";
             // TODO: Fix chances to actually be the ones that we put in the settings
-            if (Math.random() < levelChance.normal) boxType = "normal";
-            else if (Math.random() < levelChance.floating) boxType = "floating";
-            else if (Math.random() < levelChance.sinking) boxType = "sinking";
-            else if (Math.random() < levelChance.lonely) boxType = "lonely";
-            else if (Math.random() < levelChance.quantum) boxType = "quantum";
+            if (Math.random() < currentLevelSettings.normal) boxType = "normal";
+            else if (Math.random() < currentLevelSettings.floating) boxType = "floating";
+            else if (Math.random() < currentLevelSettings.sinking) boxType = "sinking";
+            else if (Math.random() < currentLevelSettings.lonely) boxType = "lonely";
+            else if (Math.random() < currentLevelSettings.quantum) boxType = "quantum";
             addBox(grid_offset_x + i * (background.width / (grid_size_x + 2) + grid_spacing_x),
                 grid_offset_y + j * (background.height / (grid_size_y + 2) + grid_spacing_y),
                 boxType);
@@ -272,7 +265,7 @@ function generateLevel(app, level) {
 
 
     // Main game loop
-    let timer = levelChances[level].time;
+    let timer = levelSettings[level].time;
     let lonelyCounter = 0;
     app.ticker.add((delta) => {
         for (let [box, box_data] of floatingBoxes) {
