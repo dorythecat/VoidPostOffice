@@ -212,6 +212,8 @@ function generateLevel(app, level, timerText, background) {
     let lonelyCounter = 0;
     const gameLoop = (delta) => {
         for (let [box, box_data] of floatingBoxes) {
+            if (box === dragTarget) continue;
+
             if (box.position.y <= grid_offset_y + box.height + grid_spacing_y) {
                 box_data.y = box.position.y;
                 continue;
@@ -221,7 +223,7 @@ function generateLevel(app, level, timerText, background) {
             box.position.y -= delta.deltaMS / 100;
 
             let boxes_x = Array.from(boxes).filter(([otherBox, otherBox_data]) =>
-                (box.x === otherBox.x || box_data.x === otherBox_data.x) && box !== otherBox
+                (box.x === otherBox.x || box_data.x === otherBox_data.x) && box !== otherBox && otherBox !== dragTarget
             );
 
             for (let [otherBox, otherBox_data] of boxes_x) {
@@ -236,13 +238,15 @@ function generateLevel(app, level, timerText, background) {
         }
 
         for (let [box, box_data] of sinkingBoxes) {
+            if (box === dragTarget) continue;
+
             if (box.position.y >= window.innerHeight - grid_offset_y - box.height) continue;
 
             const originalY = box.position.y;
             box.position.y += delta.deltaMS / 100;
 
             let boxes_x = Array.from(boxes).filter(([otherBox, otherBox_data]) =>
-                (box.x === otherBox.x || box_data.x === otherBox_data.x) && box !== otherBox
+                (box.x === otherBox.x || box_data.x === otherBox_data.x) && box !== otherBox && otherBox !== dragTarget
             );
 
             for (let [otherBox, otherBox_data] of boxes_x) {
