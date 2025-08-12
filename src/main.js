@@ -500,6 +500,21 @@ function generateLevel(app, level, timerText, levelText, background) {
     startScreen.interactive = true;
     app.stage.addChild(startScreen);
 
+    // Start screen text
+    const startText = new BitmapText({
+        text: 'The Void Post Office\n \nClick to start',
+        style: {
+            fontFamily: 'alagard',
+            fontSize: 64,
+            fill: '#c0c0c0',
+            stroke: {
+                color: '#333333',
+                width: 2
+            },
+            align: 'center'
+        }
+    });
+
     // Start the game
     function startGame() {
         app.stage.off('pointerdown', startGame, startText); // Remove the event listener to not cause bugs!!!
@@ -518,21 +533,6 @@ function generateLevel(app, level, timerText, levelText, background) {
 
         generateLevel(app, currentLevel, timerText, levelText, background);
     }
-
-    // Start screen text
-    const startText = new BitmapText({
-        text: 'The Void Post Office\n \nClick to start',
-        style: {
-            fontFamily: 'alagard',
-            fontSize: 64,
-            fill: '#c0c0c0',
-            stroke: {
-                color: '#333333',
-                width: 2
-            },
-            align: 'center'
-        }
-    });
 
     startText.anchor.set(0.5);
     startText.position.set(app.screen.width / 2, app.screen.height / 2);
