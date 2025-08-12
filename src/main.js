@@ -47,6 +47,30 @@ const levelSettings = [
         sentient: 0.0,
         quantum: 0.0,
         text: "Other packets might be\nslightly MORE dense.\n \nPlease ensure that these\npackets ARE located\nat the bottom row of The Tube\nfor easier unloading."
+    },
+    {
+        grid_size_x: 4,
+        grid_size_y: 4,
+        time: 20,
+        general: 0.5,
+        normal: 0.5,
+        floating: 0.0,
+        sinking: 0.0,
+        sentient: 0.5,
+        quantum: 0.0,
+        text: "Oftentimes, packages will be\nsentient. These packages have\nto be treated with\nspecial care.\n \nThey will respond negatively if\nno other sentient packages\nare located on their same row\nand/or column.\n \nProvide three of these\n companions, no more,\nno less."
+    },
+    {
+        grid_size_x: 4,
+        grid_size_y: 4,
+        time: 20,
+        general: 0.5,
+        normal: 0.5,
+        floating: 0.0,
+        sinking: 0.0,
+        sentient: 0.0,
+        quantum: 0.5,
+        text: "Some boxes might suffer from\nquantum entanglement issues.\n \nPlease ensure these boxes\n are properly seated\nin the grid before delivery."
     }
 ];
 
