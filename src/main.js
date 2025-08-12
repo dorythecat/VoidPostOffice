@@ -117,8 +117,6 @@ function generateLevel(app, level, timerText, levelText, background) {
         }
     }
 
-    app.stage.eventMode = 'static';
-    app.stage.hitArea = app.screen;
     app.stage.on('pointerup', onDragEnd);
     app.stage.on('pointerupoutside', onDragEnd);
 
@@ -498,5 +496,45 @@ function generateLevel(app, level, timerText, levelText, background) {
     background.opacity = 0.5;
     app.stage.addChild(background);
 
-    generateLevel(app, currentLevel, timerText, levelText, background);
+    // Start screen
+    const startScreen = new Sprite(Texture.WHITE);
+    startScreen.width = app.screen.width;
+    startScreen.height = app.screen.height;
+    startScreen.anchor.set(0.5);
+    startScreen.position.set(app.screen.width / 2, app.screen.height / 2);
+    startScreen.tint = 0x000000;
+    startScreen.alpha = 0.5;
+    startScreen.interactive = true;
+    app.stage.addChild(startScreen);
+
+    // Start the game
+    function startGame() {
+        app.stage.removeChild(startScreen);
+        app.stage.removeChild(startText);
+        generateLevel(app, currentLevel, timerText, levelText, background);
+    }
+
+    // Start screen text
+    const startText = new BitmapText({
+        text: 'The Void Post Office\n \nClick to start',
+        style: {
+            fontFamily: 'alagard',
+            fontSize: 64,
+            fill: '#c0c0c0',
+            stroke: {
+                color: '#333333',
+                width: 2
+            },
+            align: 'center'
+        }
+    });
+
+    startText.anchor.set(0.5);
+    startText.position.set(app.screen.width / 2, app.screen.height / 2);
+    app.stage.on('pointerdown', startGame, startText);
+    app.stage.addChild(startText);
+
+    // Make app interactive
+    app.stage.eventMode = 'static';
+    app.stage.hitArea = app.screen;
 })();
