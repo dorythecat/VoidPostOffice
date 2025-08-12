@@ -472,7 +472,7 @@ function generateLevel(app, level, timerText, levelText, background) {
 
     // Per-level text
     const levelText = new BitmapText({
-        text: '12345678901234\n \n12345678901234',
+        text: '',
         style: {
             fontFamily: 'alagard',
             fontSize: 32,
