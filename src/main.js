@@ -423,8 +423,9 @@ function generateLevel(app, level, timerText, background) {
         }
     });
 
+    // Timer text
     const timerText = new BitmapText({
-        text: '01:00',
+        text: '',
         style: {
             fontFamily: 'alagard',
             fontSize: 64,
