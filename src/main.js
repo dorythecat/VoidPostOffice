@@ -502,6 +502,8 @@ function generateLevel(app, level, timerText, levelText, background) {
 
     // Start the game
     function startGame() {
+        app.stage.off('pointerdown', startGame, startText); // Remove the event listener to not cause bugs!!!
+
         app.stage.removeChild(startScreen);
         app.stage.removeChild(startText);
 
