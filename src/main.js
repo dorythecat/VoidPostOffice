@@ -179,18 +179,11 @@ function generateLevel(app, level, timerText, background) {
         }
     }
 
-    const floatingBoxes = Array.from(boxes).filter(([_, box_data]) =>
-        box_data.type === "floating"
-    );
-    const lonelyBoxes = Array.from(boxes).filter(([_, box_data]) =>
-        box_data.type === "lonely"
-    );
-    const sinkingBoxes = Array.from(boxes).filter(([_, box_data]) =>
-        box_data.type === "sinking"
-    );
-    const quantumBoxes = Array.from(boxes).filter(([_, box_data]) =>
-        box_data.type === "quantum"
-    );
+    // Filter boxes by type
+    const floatingBoxes = Array.from(boxes).filter(([_, box_data]) => box_data.type === "floating");
+    const lonelyBoxes = Array.from(boxes).filter(([_, box_data]) => box_data.type === "lonely");
+    const sinkingBoxes = Array.from(boxes).filter(([_, box_data]) => box_data.type === "sinking");
+    const quantumBoxes = Array.from(boxes).filter(([_, box_data]) => box_data.type === "quantum");
 
     while (lonelyBoxes.length % 3 !== 0) {
         let randomBox = Math.floor(Math.random() * lonelyBoxes.length);
@@ -242,9 +235,7 @@ function generateLevel(app, level, timerText, background) {
         }
 
         for (let [box, box_data] of sinkingBoxes) {
-            if (box.position.y >= window.innerHeight - grid_offset_y - box.height) {
-                continue;
-            }
+            if (box.position.y >= window.innerHeight - grid_offset_y - box.height) continue;
 
             const originalY = box.position.y;
             box.position.y += delta.deltaMS / 100;
@@ -282,22 +273,21 @@ function generateLevel(app, level, timerText, background) {
             box.position.y += Math.random() * 2 - 1;
         }
 
-        if (quantumBoxes.length > 0) {
-            if (timer > 3 && Math.random() < (timer - 3) / 1000) {
-                if (quantumBoxes.length !== 1 || quantumBoxes[0][0] !== dragTarget) { // Make sure we're not dragging the quantum box we chose
-                    let randomBox = quantumBoxes[Math.floor(Math.random() * quantumBoxes.length)];
-                    while (randomBox === dragTarget) { // Don't use the one we're dragging
-                        randomBox = quantumBoxes[Math.floor(Math.random() * quantumBoxes.length)];
-                    }
-                    randomBox[0].position.set(
-                        grid_offset_x + (Math.random() * currentLevelSettings.grid_size_x + 1) * (background.width / (currentLevelSettings.grid_size_x + 2) + grid_spacing_x),
-                        grid_offset_y + (Math.random() * currentLevelSettings.grid_size_y + 1)  * (background.height / (currentLevelSettings.grid_size_y + 2) + grid_spacing_y)
-                    );
-                    randomBox[1].x = randomBox[0].position.x;
-                    randomBox[1].y = randomBox[0].position.y;
-                    app.stage.setChildIndex(randomBox[0], app.stage.children.length - 1);
-                }
+        if (quantumBoxes.length > 0 && // Are there any quantum boxes to move?
+            timer > 3 && // Don't move the quantum box near the end of the level
+            Math.random() < (timer - 3) / 1000 && // Randomly move the quantum box, decreasing the chance as time goes on
+            (quantumBoxes.length !== 1 || quantumBoxes[0][0] !== dragTarget)) { // Make sure we're not dragging the quantum box we chose
+            let randomBox = quantumBoxes[Math.floor(Math.random() * quantumBoxes.length)];
+            while (randomBox === dragTarget) { // Don't use the one we're dragging
+                randomBox = quantumBoxes[Math.floor(Math.random() * quantumBoxes.length)];
             }
+            randomBox[0].position.set(
+                grid_offset_x + (Math.random() * currentLevelSettings.grid_size_x + 1) * (background.width / (currentLevelSettings.grid_size_x + 2) + grid_spacing_x),
+                grid_offset_y + (Math.random() * currentLevelSettings.grid_size_y + 1) * (background.height / (currentLevelSettings.grid_size_y + 2) + grid_spacing_y)
+            );
+            randomBox[1].x = randomBox[0].position.x;
+            randomBox[1].y = randomBox[0].position.y;
+            app.stage.setChildIndex(randomBox[0], app.stage.children.length - 1);
         }
 
         // Delivery time!
