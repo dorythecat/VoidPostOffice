@@ -40,7 +40,7 @@ const levelSettings = [
         grid_size_x: 4,
         grid_size_y: 4,
         time: 20,
-        general: 0.7,
+        general: 0.5,
         normal: 0.6,
         floating: 0.2,
         sinking: 0.2,
@@ -48,7 +48,6 @@ const levelSettings = [
         quantum: 0.0,
         text: "Other packets might be\nslightly MORE dense.\n \nPlease ensure that these\npackets ARE located\nat the bottom row of The Tube\nfor easier unloading."
     }
-    // Add more levels as needed
 ];
 
 // --- GLOBAL ASSETS ---
