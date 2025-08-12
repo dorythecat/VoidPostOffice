@@ -127,6 +127,13 @@ function generateLevel(app, level, timerText, levelText, background) {
 
     // Dragging functions
     let dragTarget = null;
+    function onDragStart() {
+        this.alpha = 0.7;
+        dragTarget = this;
+        app.stage.setChildIndex(this, app.stage.children.length - 1);
+        app.stage.on('pointermove', onDragMove);
+    }
+
     function onDragMove(event) {
         if (!dragTarget) return; // Nothing to do
 
@@ -137,13 +144,6 @@ function generateLevel(app, level, timerText, levelText, background) {
         else if (dragTarget.position.x > window.innerWidth - x) dragTarget.position.x = window.innerWidth - x;
         if (dragTarget.position.y < y) dragTarget.position.y = y;
         else if (dragTarget.position.y > window.innerHeight - y) dragTarget.position.y = window.innerHeight - y;
-    }
-
-    function onDragStart() {
-        this.alpha = 0.7;
-        dragTarget = this;
-        app.stage.setChildIndex(this, app.stage.children.length - 1);
-        app.stage.on('pointermove', onDragMove);
     }
 
     function inCell(box, cell) {
