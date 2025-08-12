@@ -70,7 +70,7 @@ const levelSettings = [
         sinking: 0.0,
         sentient: 0.0,
         quantum: 0.5,
-        text: "Some boxes might suffer from\nquantum entanglement issues.\n \nPlease ensure these boxes\n are properly seated\nin the grid before delivery."
+        text: "Some boxes might suffer from\nquantum fluid leakage issues.\n \nPlease ensure these boxes\n are properly seated\nin the grid before delivery."
     }
 ];
 
