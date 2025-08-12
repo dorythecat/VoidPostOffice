@@ -21,7 +21,8 @@ const levelSettings = [
         floating: 0.0,
         sinking: 0.0,
         lonely: 0.0,
-        quantum: 0.0
+        quantum: 0.0,
+        text: 'Level 1'
     },
     {
         grid_size_x: 5,
@@ -32,7 +33,8 @@ const levelSettings = [
         floating: 0.2,
         sinking: 0.0,
         lonely: 0.0,
-        quantum: 0.0
+        quantum: 0.0,
+        text: 'Level 2'
     },
     {
         grid_size_x: 6,
@@ -43,7 +45,8 @@ const levelSettings = [
         floating: 0.2,
         sinking: 0.2,
         lonely: 0.0,
-        quantum: 0.0
+        quantum: 0.0,
+        text: 'Level 3'
     }
     // Add more levels as needed
 ];
@@ -57,7 +60,7 @@ const boxTexture = await Assets.load("/assets/boxes/box_1.png");
 await Assets.load('/assets/fonts/alagard.ttf');
 
 // --- LEVEL GENERATION ---
-function generateLevel(app, level, timerText, background) {
+function generateLevel(app, level, timerText, levelText, background) {
     // Clear previous level
     boxes.forEach((_, box) => app.stage.removeChild(box))
     boxes.clear();
@@ -206,6 +209,8 @@ function generateLevel(app, level, timerText, background) {
             box1.y + background.height / (currentLevelSettings.grid_size_y + 2) + margin_y > box2.y
         );
     }
+
+    levelText.text = currentLevelSettings.text;
 
     // Main game loop
     let timer = levelSettings[level].time;
@@ -359,13 +364,13 @@ function generateLevel(app, level, timerText, background) {
             if (won) {
                 if (currentLevel < levelSettings.length - 1) {
                     currentLevel++;
-                    setTimeout(() => generateLevel(app, currentLevel, timerText, background), 1500);
+                    setTimeout(() => generateLevel(app, currentLevel, timerText, levelText, background), 1500);
                 } else alert("Congratulations! You've completed all levels!");
             } else {
                 alert("You lost! Try again.");
                 // Reset to the start
                 currentLevel = 0;
-                setTimeout(() => generateLevel(app, currentLevel, timerText, background), 1500);
+                setTimeout(() => generateLevel(app, currentLevel, timerText, levelText, background), 1500);
             }
         }
         timer -= delta.deltaMS / 1000;
@@ -468,5 +473,5 @@ function generateLevel(app, level, timerText, background) {
     background.opacity = 0.5;
     app.stage.addChild(background);
 
-    generateLevel(app, currentLevel, timerText, background);
+    generateLevel(app, currentLevel, timerText, levelText, background);
 })();
