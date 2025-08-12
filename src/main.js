@@ -302,7 +302,7 @@ function generateLevel(app, level, timerText, background) {
 
             let won = true;
             for (let [box, box_data] of floatingBoxes) {
-                if (box.y !== box_data.y) {
+                if (box.position.y !== box_data.y) {
                     won = false;
                     break;
                 }
@@ -327,13 +327,13 @@ function generateLevel(app, level, timerText, background) {
             }
 
             for (let [box, box_data] of sinkingBoxes) {
-                if (box.y === box_data.y) continue;
+                if (box.position.y === box_data.y) continue;
                 won = false;
                 break;
             }
 
             for (let [box, box_data] of lonelyBoxes) {
-                if (box.y !== box_data.y) {
+                if (box.position.y !== box_data.y) {
                     won = false;
                     break;
                 }
@@ -351,7 +351,7 @@ function generateLevel(app, level, timerText, background) {
             }
 
             for (let [box, box_data] of boxes) {
-                if (box.y === box_data.y) continue;
+                if (box.position.y === box_data.y) continue;
                 won = false;
                 break;
             }
