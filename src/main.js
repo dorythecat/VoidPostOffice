@@ -15,7 +15,7 @@ const levelSettings = [
     {
         grid_size_x: 4,
         grid_size_y: 4,
-        time: 20,
+        time: 10,
         general: 0.5,
         normal: 1.0,
         floating: 0.0,
@@ -27,7 +27,7 @@ const levelSettings = [
     {
         grid_size_x: 4,
         grid_size_y: 4,
-        time: 20,
+        time: 15,
         general: 0.5,
         normal: 0.5,
         floating: 0.5,
@@ -39,7 +39,7 @@ const levelSettings = [
     {
         grid_size_x: 4,
         grid_size_y: 4,
-        time: 20,
+        time: 15,
         general: 0.5,
         normal: 0.6,
         floating: 0.2,
@@ -51,7 +51,7 @@ const levelSettings = [
     {
         grid_size_x: 4,
         grid_size_y: 4,
-        time: 20,
+        time: 15,
         general: 0.5,
         normal: 0.5,
         floating: 0.0,
@@ -63,7 +63,7 @@ const levelSettings = [
     {
         grid_size_x: 4,
         grid_size_y: 4,
-        time: 20,
+        time: 15,
         general: 0.5,
         normal: 0.5,
         floating: 0.0,
