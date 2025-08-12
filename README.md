@@ -30,13 +30,13 @@ The precautions are:
   malfunction of the microspace turbo-encabulator.
 - Floating boxes (red) should always be kept under another box, and never near the
   top of The Tube, as they might escape into [[REDACTED]].
-- All lonely boxes (black) should have exactly three other lonely boxes in their
-  row and column. This means that a box in a row with only one other box will
-  need a box placed either in the same row or column. If this rule is not kept,
-  lonely boxes might [[REDACTED]].
 - Sinking boxes (green) cannot be placed above any other box, not even other
   sinking boxes, due to disruption of cargo during [[REDACTED]]. Be especially
   careful of putting sinking boxes atop floating boxes, as they might [[REDACTED]].
+- All sentient boxes (black) should have exactly three other sentient boxes in their
+  row and column. This means that a box in a row with only one other box will
+  need a box placed either in the same row or column. If this rule is not kept,
+  sentient boxes might [[REDACTED]].
 - Be careful with quantum boxes! They might teleport randomly at any moment! It does
   seem like they tire as time goes though...
 
