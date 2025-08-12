@@ -15,30 +15,30 @@ const levelSettings = [
     {
         grid_size_x: 4,
         grid_size_y: 4,
-        time: 10,
+        time: 20,
         general: 0.5,
         normal: 1.0,
         floating: 0.0,
         sinking: 0.0,
         lonely: 0.0,
         quantum: 0.0,
-        text: 'Level 1'
+        text: "Welcome to the\nVoid Post Office's\nTraining Routine\n \nPlease make yourself\ncomfortable, and try to\n drag the packets around,\nbut please be careful.\n \nEnsure that no\npackages are out of\nthe Tube's grid upon delivery."
     },
     {
-        grid_size_x: 5,
-        grid_size_y: 5,
-        time: 15,
-        general: 0.6,
-        normal: 0.8,
-        floating: 0.2,
+        grid_size_x: 4,
+        grid_size_y: 4,
+        time: 20,
+        general: 0.5,
+        normal: 0.5,
+        floating: 0.5,
         sinking: 0.0,
         lonely: 0.0,
         quantum: 0.0,
-        text: 'Level 2'
+        text: "Some clients might send\npackages which are\nslightly LESS dense than the\n[[PATENTED TUBE MEDIUM]].\n \nPlease ensure that these\npackages ARE NOT located\nnear the top row of The Tube."
     },
     {
-        grid_size_x: 6,
-        grid_size_y: 6,
+        grid_size_x: 4,
+        grid_size_y: 4,
         time: 20,
         general: 0.7,
         normal: 0.6,
@@ -46,7 +46,7 @@ const levelSettings = [
         sinking: 0.2,
         lonely: 0.0,
         quantum: 0.0,
-        text: 'Level 3'
+        text: "Other packets might be\nslightly MORE dense.\n \nPlease ensure that these\npackets ARE located\nat the bottom row of The Tube\nfor easier unloading."
     }
     // Add more levels as needed
 ];
