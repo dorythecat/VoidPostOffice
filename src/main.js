@@ -391,11 +391,10 @@ function generateLevel(app, level, timerText, levelText, background) {
                 if (currentLevel < levelSettings.length - 1) {
                     currentLevel++;
                     setTimeout(() => generateLevel(app, currentLevel, timerText, levelText, background), 1500);
-                } else alert("Congratulations! You've completed all levels!");
+                } else alert("Congratulations! You've completed this demo! :D\nThx for playing! <3");
             } else {
-                alert("You lost! Try again.");
-                // Reset to the start
-                currentLevel = 0;
+                alert("Packages couldn't be delivering. Starting temporal manipulator...");
+                // Reset this level
                 setTimeout(() => generateLevel(app, currentLevel, timerText, levelText, background), 1500);
             }
         }
