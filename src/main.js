@@ -489,15 +489,6 @@ function generateLevel(app, level, timerText, levelText, background) {
     levelText.position.set(app.screen.width / 7, app.screen.height / 7 * 3);
     app.stage.addChild(levelText);
 
-    const background = new Sprite(Texture.WHITE);
-    background.width = Math.min(app.screen.height, app.screen.width) - 100;
-    background.height = Math.min(app.screen.height, app.screen.width) - 100;
-    background.anchor.set(0.5);
-    background.position.set(app.screen.width / 2, app.screen.height / 2);
-    background.tint = 0xc0c0c0;
-    background.opacity = 0.5;
-    app.stage.addChild(background);
-
     // Start screen
     const startScreen = new Sprite(Texture.WHITE);
     startScreen.width = app.screen.width;
@@ -513,6 +504,16 @@ function generateLevel(app, level, timerText, levelText, background) {
     function startGame() {
         app.stage.removeChild(startScreen);
         app.stage.removeChild(startText);
+
+        const background = new Sprite(Texture.WHITE);
+        background.width = Math.min(app.screen.height, app.screen.width) - 100;
+        background.height = Math.min(app.screen.height, app.screen.width) - 100;
+        background.anchor.set(0.5);
+        background.position.set(app.screen.width / 2, app.screen.height / 2);
+        background.tint = 0xc0c0c0;
+        background.opacity = 0.5;
+        app.stage.addChild(background);
+
         generateLevel(app, currentLevel, timerText, levelText, background);
     }
 
