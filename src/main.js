@@ -438,7 +438,8 @@ function generateLevel(app, level, timerText, levelText, background) {
             stroke: {
                 color: '#eeeeee',
                 width: 2
-            }
+            },
+            align: 'center'
         }
     });
 
@@ -451,12 +452,13 @@ function generateLevel(app, level, timerText, levelText, background) {
         text: '12345678901234\n \n12345678901234',
         style: {
             fontFamily: 'alagard',
-            fontSize: 64,
+            fontSize: 32,
             fill: '#c0c0c0',
             stroke: {
-                color: '#eeeeee',
+                color: '#333333',
                 width: 2
-            }
+            },
+            align: 'center'
         }
     });
 
