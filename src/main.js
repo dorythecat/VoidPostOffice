@@ -23,8 +23,7 @@ const levelSettings = [
         sentient: 0.0,
         quantum: 0.0,
         text: "Welcome to the\nVoid Post Office's\nTraining Routine\n \nPlease make yourself\ncomfortable, and try to\n drag the packets around,\nbut please be careful.\n \nEnsure that no\npackages are out of\nthe Tube's grid upon delivery."
-    },
-    {
+    }, {
         grid_size_x: 4,
         grid_size_y: 4,
         time: 15,
@@ -35,8 +34,7 @@ const levelSettings = [
         sentient: 0.0,
         quantum: 0.0,
         text: "Some clients might send\npackages which are\nslightly LESS dense than the\n[[PATENTED TUBE MEDIUM]].\n \nPlease ensure that these\npackages ARE NOT located\nnear the top row of The Tube."
-    },
-    {
+    }, {
         grid_size_x: 4,
         grid_size_y: 4,
         time: 15,
@@ -47,8 +45,7 @@ const levelSettings = [
         sentient: 0.0,
         quantum: 0.0,
         text: "Other packets might be\nslightly MORE dense.\n \nPlease ensure that these\npackets ARE located\nat the bottom row of The Tube\nfor easier unloading."
-    },
-    {
+    }, {
         grid_size_x: 4,
         grid_size_y: 4,
         time: 15,
@@ -59,8 +56,7 @@ const levelSettings = [
         sentient: 0.5,
         quantum: 0.0,
         text: "Oftentimes, packages will be\nsentient. These packages have\nto be treated with\nspecial care.\n \nThey will respond negatively if\nno other sentient packages\nare located on their same row\nand/or column.\n \nProvide three of these\n companions, no more,\nno less."
-    },
-    {
+    }, {
         grid_size_x: 4,
         grid_size_y: 4,
         time: 15,
@@ -71,8 +67,7 @@ const levelSettings = [
         sentient: 0.0,
         quantum: 0.5,
         text: "Some boxes might suffer from\nquantum fluid leakage issues.\n \nPlease ensure these boxes\n are properly seated\nin the grid before delivery."
-    },
-    {
+    }, {
         grid_size_x: 6,
         grid_size_y: 6,
         time: 20,
@@ -83,8 +78,7 @@ const levelSettings = [
         sentient: 0.0,
         quantum: 0.0,
         text: "Now that you have learnt\nthe basics of being a\nTube Operator,\nI think you're ready\nto take on the rest of these\ndeliveries, all by yourself.\n \nDo not fail me."
-    },
-    {
+    }, {
         grid_size_x: 6,
         grid_size_y: 6,
         time: 20,
@@ -95,8 +89,7 @@ const levelSettings = [
         sentient: 0.0,
         quantum: 0.0,
         text: "Remember, you may sometimes\nfind that you cannot\ncomplete a delivery.\n \nWorry not, The Tube is\nequipped with a\ntemporal manipulator\nthat will automatically\ntrigger when needed!"
-    },
-    {
+    }, {
         grid_size_x: 6,
         grid_size_y: 6,
         time: 20,
@@ -107,8 +100,7 @@ const levelSettings = [
         sentient: 0.0,
         quantum: 0.0,
         text: ""
-    },
-    {
+    }, {
         grid_size_x: 6,
         grid_size_y: 6,
         time: 20,
@@ -119,8 +111,7 @@ const levelSettings = [
         sentient: 0.0,
         quantum: 0.1,
         text: ""
-    },
-    {
+    }, {
         grid_size_x: 6,
         grid_size_y: 6,
         time: 20,
@@ -131,8 +122,7 @@ const levelSettings = [
         sentient: 0.0,
         quantum: 0.2,
         text: ""
-    },
-    {
+    }, {
         grid_size_x: 8,
         grid_size_y: 8,
         time: 30,
@@ -156,7 +146,7 @@ await Assets.load('/assets/fonts/alagard.ttf');
 
 // --- LEVEL GENERATION ---
 function generateLevel(app, level, timerText, levelText, background) {
-    // Clear previous level
+    // Clear the previous level
     boxes.forEach((_, box) => app.stage.removeChild(box))
     boxes.clear();
 
@@ -253,10 +243,20 @@ function generateLevel(app, level, timerText, levelText, background) {
         box.height = background.height / (currentLevelSettings.grid_size_y + 2);
         box.cursor = "pointer";
         box.eventMode = "static";
-        if (type === "floating") box.tint = 0xaa0000;
-        else if (type === "sentient") box.tint = 0x101010;
-        else if (type === "sinking") box.tint = 0x00aa00;
-        else if (type === "quantum") box.tint = 0x0000aa;
+        switch (type) {
+            case "floating":
+                box.tint = 0xaa0000;
+                break;
+            case "sinking":
+                box.tint = 0x00aa00;
+                break;
+            case "sentient":
+                box.tint = 0x101010;
+                break;
+            case "quantum":
+                box.tint = 0x0000aa;
+                break;
+        }
         box.on('pointerdown', onDragStart, box);
 
         box.anchor.set(0.5);
@@ -398,80 +398,85 @@ function generateLevel(app, level, timerText, levelText, background) {
             app.stage.setChildIndex(randomBox[0], app.stage.children.length - 1);
         }
 
+        if (timer > 0) {
+            timer -= delta.deltaMS / 1000;
+            timerText.text = "00:" + (timer < 10 ? "0" : "") + Math.floor(timer);
+            return;
+        }
+
         // Delivery time!
-        if (timer < 1) {
-            app.ticker.remove(gameLoop);
-            app.stage.eventMode = 'none';
+        app.ticker.remove(gameLoop);
+        app.stage.eventMode = 'none';
 
-            let won = true;
-            for (let [box, box_data] of floatingBoxes) {
-                if (box.position.y !== box_data.y) {
-                    won = false;
-                    break;
-                }
-
-                if (box.position.y <= grid_offset_y + box.height + grid_spacing_y) {
-                    won = false;
-                    break;
-                }
-
-                let canContinue = false;
-                for (let [otherBox, _] of boxes) {
-                    if (otherBox === box) continue;
-                    if (box.x !== otherBox.x) continue;
-                    if (box.y + background.height / (currentLevelSettings.grid_size_y + 2) + grid_spacing_y > otherBox.y) {
-                        canContinue = true;
-                        break;
-                    }
-                } if (canContinue) continue;
-
+        let won = true;
+        for (let [box, box_data] of floatingBoxes) {
+            if (box.position.y !== box_data.y) {
                 won = false;
                 break;
             }
 
-            for (let [box, box_data] of sinkingBoxes) {
-                if (box.position.y === box_data.y) continue;
+            if (box.position.y <= grid_offset_y + box.height + grid_spacing_y) {
                 won = false;
                 break;
             }
 
-            for (let [box, box_data] of sentientBoxes) {
-                if (box.position.y !== box_data.y) {
-                    won = false;
-                    break;
-                }
-
-                let neighbours = 0;
-                for (let [otherBox, otherBox_data] of sentientBoxes) {
-                    if (otherBox === box) continue;
-                    if (otherBox_data.x === box_data.x || otherBox_data.y === box_data.y) neighbours++;
-                }
-
-                if (neighbours !== 2) {
-                    won = false;
+            let canContinue = false;
+            for (let [otherBox, _] of boxes) {
+                if (otherBox === box) continue;
+                if (box.x !== otherBox.x) continue;
+                if (box.y + background.height / (currentLevelSettings.grid_size_y + 2) + grid_spacing_y > otherBox.y) {
+                    canContinue = true;
                     break;
                 }
             }
+            if (canContinue) continue;
 
-            for (let [box, box_data] of boxes) {
-                if (box.position.y === box_data.y) continue;
+            won = false;
+            break;
+        }
+
+        for (let [box, box_data] of sinkingBoxes) {
+            if (box.position.y === box_data.y) continue;
+            won = false;
+            break;
+        }
+
+        for (let [box, box_data] of sentientBoxes) {
+            if (box.position.y !== box_data.y) {
                 won = false;
                 break;
             }
 
-            if (won) {
-                if (currentLevel < levelSettings.length - 1) {
-                    currentLevel++;
-                    setTimeout(() => generateLevel(app, currentLevel, timerText, levelText, background), 1500);
-                } else alert("Congratulations! You've completed this demo! :D\nThx for playing! <3");
-            } else {
-                alert("Packages couldn't be delivering. Starting temporal manipulator...");
-                // Reset this level
-                setTimeout(() => generateLevel(app, currentLevel, timerText, levelText, background), 1500);
+            let neighbours = 0;
+            for (let [otherBox, otherBox_data] of sentientBoxes) {
+                if (otherBox === box) continue;
+                if (otherBox_data.x === box_data.x || otherBox_data.y === box_data.y) neighbours++;
+            }
+
+            if (neighbours !== 2) {
+                won = false;
+                break;
             }
         }
-        timer -= delta.deltaMS / 1000;
-        timerText.text = "00:" + (timer < 10 ? "0" : "") + Math.floor(timer);
+
+        for (let [box, box_data] of boxes) {
+            if (box.position.y === box_data.y) continue;
+            won = false;
+            break;
+        }
+
+        if (!won) {
+            alert("Packages couldn't be delivering. Starting temporal manipulator...");
+            // Reset this level
+            setTimeout(() => generateLevel(app, currentLevel, timerText, levelText, background), 1500);
+            return;
+        }
+        if (currentLevel >= levelSettings.length - 1) {
+            alert("Congratulations! You've completed this demo! :D\nThx for playing! <3");
+            return;
+        }
+        currentLevel++;
+        setTimeout(() => generateLevel(app, currentLevel, timerText, levelText, background), 1500);
     };
 
     app.ticker.add(gameLoop);
