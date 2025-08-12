@@ -20,7 +20,7 @@ const levelSettings = [
         normal: 1.0,
         floating: 0.0,
         sinking: 0.0,
-        lonely: 0.0,
+        sentient: 0.0,
         quantum: 0.0,
         text: "Welcome to the\nVoid Post Office's\nTraining Routine\n \nPlease make yourself\ncomfortable, and try to\n drag the packets around,\nbut please be careful.\n \nEnsure that no\npackages are out of\nthe Tube's grid upon delivery."
     },
@@ -32,7 +32,7 @@ const levelSettings = [
         normal: 0.5,
         floating: 0.5,
         sinking: 0.0,
-        lonely: 0.0,
+        sentient: 0.0,
         quantum: 0.0,
         text: "Some clients might send\npackages which are\nslightly LESS dense than the\n[[PATENTED TUBE MEDIUM]].\n \nPlease ensure that these\npackages ARE NOT located\nnear the top row of The Tube."
     },
@@ -44,7 +44,7 @@ const levelSettings = [
         normal: 0.6,
         floating: 0.2,
         sinking: 0.2,
-        lonely: 0.0,
+        sentient: 0.0,
         quantum: 0.0,
         text: "Other packets might be\nslightly MORE dense.\n \nPlease ensure that these\npackets ARE located\nat the bottom row of The Tube\nfor easier unloading."
     }
@@ -156,7 +156,7 @@ function generateLevel(app, level, timerText, levelText, background) {
         box.cursor = "pointer";
         box.eventMode = "static";
         if (type === "floating") box.tint = 0xaa0000;
-        else if (type === "lonely") box.tint = 0x101010;
+        else if (type === "sentient") box.tint = 0x101010;
         else if (type === "sinking") box.tint = 0x00aa00;
         else if (type === "quantum") box.tint = 0x0000aa;
         box.on('pointerdown', onDragStart, box);
@@ -174,9 +174,9 @@ function generateLevel(app, level, timerText, levelText, background) {
             let random = Math.random();
             if (random < currentLevelSettings.normal) boxType = "normal";
             else if (random < currentLevelSettings.normal + currentLevelSettings.floating) boxType = "floating";
-            else if (random < currentLevelSettings.normal + currentLevelSettings.floating + currentLevelSettings.lonely) boxType = "lonely";
-            else if (random < currentLevelSettings.normal + currentLevelSettings.floating + currentLevelSettings.lonely + currentLevelSettings.sinking) boxType = "sinking";
-            else if (random < currentLevelSettings.normal + currentLevelSettings.floating + currentLevelSettings.lonely + currentLevelSettings.sinking + currentLevelSettings.quantum) boxType = "quantum";
+            else if (random < currentLevelSettings.normal + currentLevelSettings.floating + currentLevelSettings.sentient) boxType = "sentient";
+            else if (random < currentLevelSettings.normal + currentLevelSettings.floating + currentLevelSettings.sentient + currentLevelSettings.sinking) boxType = "sinking";
+            else if (random < currentLevelSettings.normal + currentLevelSettings.floating + currentLevelSettings.sentient + currentLevelSettings.sinking + currentLevelSettings.quantum) boxType = "quantum";
             addBox(grid_offset_x + i * (background.width / (currentLevelSettings.grid_size_x + 2) + grid_spacing_x),
                 grid_offset_y + j * (background.height / (currentLevelSettings.grid_size_y + 2) + grid_spacing_y),
                 boxType);
@@ -185,15 +185,15 @@ function generateLevel(app, level, timerText, levelText, background) {
 
     // Filter boxes by type
     const floatingBoxes = Array.from(boxes).filter(([_, box_data]) => box_data.type === "floating");
-    const lonelyBoxes = Array.from(boxes).filter(([_, box_data]) => box_data.type === "lonely");
+    const sentientBoxes = Array.from(boxes).filter(([_, box_data]) => box_data.type === "sentient");
     const sinkingBoxes = Array.from(boxes).filter(([_, box_data]) => box_data.type === "sinking");
     const quantumBoxes = Array.from(boxes).filter(([_, box_data]) => box_data.type === "quantum");
 
-    while (lonelyBoxes.length % 3 !== 0) {
-        let randomBox = Math.floor(Math.random() * lonelyBoxes.length);
-        app.stage.removeChild(lonelyBoxes[randomBox][0]);
-        boxes.delete(lonelyBoxes[randomBox][0]);
-        lonelyBoxes.splice(randomBox, 1);
+    while (sentientBoxes.length % 3 !== 0) {
+        let randomBox = Math.floor(Math.random() * sentientBoxes.length);
+        app.stage.removeChild(sentientBoxes[randomBox][0]);
+        boxes.delete(sentientBoxes[randomBox][0]);
+        sentientBoxes.splice(randomBox, 1);
     }
 
     while (sinkingBoxes.length > 8) {
@@ -214,7 +214,7 @@ function generateLevel(app, level, timerText, levelText, background) {
 
     // Main game loop
     let timer = levelSettings[level].time;
-    let lonelyCounter = 0;
+    let sentientCounter = 0;
     const gameLoop = (delta) => {
         for (let [box, box_data] of floatingBoxes) {
             if (box === dragTarget) continue;
@@ -233,7 +233,7 @@ function generateLevel(app, level, timerText, levelText, background) {
 
             for (let [otherBox, otherBox_data] of boxes_x) {
                 if (checkCollision(box,
-                    otherBox_data.type === "lonely" ? otherBox_data : otherBox,
+                    otherBox_data.type === "sentient" ? otherBox_data : otherBox,
                     otherBox_data.type === "sinking" ? 0 : grid_spacing_y)) {
                     box.position.y = originalY;
                     box_data.y = originalY;
@@ -256,7 +256,7 @@ function generateLevel(app, level, timerText, levelText, background) {
 
             for (let [otherBox, otherBox_data] of boxes_x) {
                 if (checkCollision(box,
-                    otherBox_data.type === "lonely" ? otherBox_data : otherBox)) {
+                    otherBox_data.type === "sentient" ? otherBox_data : otherBox)) {
                     box.position.y = originalY;
                     box_data.y = originalY;
                     break;
@@ -264,17 +264,17 @@ function generateLevel(app, level, timerText, levelText, background) {
             }
         }
 
-        for (let [box, box_data] of lonelyBoxes) {
+        for (let [box, box_data] of sentientBoxes) {
             if (box === dragTarget) continue;
 
             let neighbours = 0;
-            for (let [otherBox, otherBox_data] of lonelyBoxes) {
+            for (let [otherBox, otherBox_data] of sentientBoxes) {
                 if (otherBox === box) continue;
                 if (otherBox_data.x === box_data.x || otherBox_data.y === box_data.y) neighbours++;
             }
 
-            lonelyCounter++;
-            if (lonelyCounter % 5 === 0 || neighbours === 2) {
+            sentientCounter++;
+            if (sentientCounter % 5 === 0 || neighbours === 2) {
                 box.position.x = box_data.x;
                 box.position.y = box_data.y;
                 continue;
@@ -337,14 +337,14 @@ function generateLevel(app, level, timerText, levelText, background) {
                 break;
             }
 
-            for (let [box, box_data] of lonelyBoxes) {
+            for (let [box, box_data] of sentientBoxes) {
                 if (box.position.y !== box_data.y) {
                     won = false;
                     break;
                 }
 
                 let neighbours = 0;
-                for (let [otherBox, otherBox_data] of lonelyBoxes) {
+                for (let [otherBox, otherBox_data] of sentientBoxes) {
                     if (otherBox === box) continue;
                     if (otherBox_data.x === box_data.x || otherBox_data.y === box_data.y) neighbours++;
                 }
