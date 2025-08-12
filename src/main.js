@@ -213,24 +213,6 @@ function generateLevel(app, level, timerText, background) {
         );
     }
 
-    // Star movement
-    const starSpeedX = Math.random() * 2 - 1;
-    const starSpeedY = Math.random() * 2 - 1;
-    const speedFactor = Math.random() * 100;
-    app.ticker.add((delta) => {
-        for (let star of stars) {
-            star.position.x += starSpeedX * delta.deltaMS / speedFactor;
-            star.position.y += starSpeedY * delta.deltaMS / speedFactor;
-            if (Math.random() < 0.01) star.alpha = Math.random();
-            if (star.alpha < 0.5) star.alpha = 0.5;
-
-            if (star.position.x < -star.width) star.position.x = app.screen.width;
-            else if (star.position.x > app.screen.width) star.position.x = -star.width;
-            if (star.position.y < -star.height) star.position.y = app.screen.height;
-            else if (star.position.y > app.screen.height) star.position.y = -star.height;
-        }
-    });
-
     // Main game loop
     let timer = levelSettings[level].time;
     let lonelyCounter = 0;
@@ -425,6 +407,24 @@ function generateLevel(app, level, timerText, background) {
             Math.random() * 10,
             Math.random() * 0xffffff);
     }
+
+    // Star movement
+    const starSpeedX = Math.random() * 2 - 1;
+    const starSpeedY = Math.random() * 2 - 1;
+    const speedFactor = Math.random() * 100;
+    app.ticker.add((delta) => {
+        for (let star of stars) {
+            star.position.x += starSpeedX * delta.deltaMS / speedFactor;
+            star.position.y += starSpeedY * delta.deltaMS / speedFactor;
+            if (Math.random() < 0.01) star.alpha = Math.random();
+            if (star.alpha < 0.5) star.alpha = 0.5;
+
+            if (star.position.x < -star.width) star.position.x = app.screen.width;
+            else if (star.position.x > app.screen.width) star.position.x = -star.width;
+            if (star.position.y < -star.height) star.position.y = app.screen.height;
+            else if (star.position.y > app.screen.height) star.position.y = -star.height;
+        }
+    });
 
     const timerText = new BitmapText({
         text: '01:00',
