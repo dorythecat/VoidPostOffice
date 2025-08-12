@@ -441,6 +441,24 @@ function generateLevel(app, level, timerText, background) {
     timerText.position.set(app.screen.width / 5, app.screen.height / 7);
     app.stage.addChild(timerText);
 
+    // Per-level text
+    const levelText = new BitmapText({
+        text: '12345678901234\n \n12345678901234',
+        style: {
+            fontFamily: 'alagard',
+            fontSize: 64,
+            fill: '#c0c0c0',
+            stroke: {
+                color: '#eeeeee',
+                width: 2
+            }
+        }
+    });
+
+    levelText.anchor.set(0.5);
+    levelText.position.set(app.screen.width / 7, app.screen.height / 7 * 3);
+    app.stage.addChild(levelText);
+
     const background = new Sprite(Texture.WHITE);
     background.width = Math.min(app.screen.height, app.screen.width) - 100;
     background.height = Math.min(app.screen.height, app.screen.width) - 100;
