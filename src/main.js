@@ -71,6 +71,78 @@ const levelSettings = [
         sentient: 0.0,
         quantum: 0.5,
         text: "Some boxes might suffer from\nquantum fluid leakage issues.\n \nPlease ensure these boxes\n are properly seated\nin the grid before delivery."
+    },
+    {
+        grid_size_x: 6,
+        grid_size_y: 6,
+        time: 20,
+        general: 0.5,
+        normal: 0.7,
+        floating: 0.2,
+        sinking: 0.1,
+        sentient: 0.0,
+        quantum: 0.0,
+        text: "Now that you have learnt\nthe basics of being a\nTube Operator,\nI think you're ready\nto take on the rest of these\ndeliveries, all by yourself.\n \nDo not fail me."
+    },
+    {
+        grid_size_x: 6,
+        grid_size_y: 6,
+        time: 20,
+        general: 0.5,
+        normal: 0.7,
+        floating: 0.2,
+        sinking: 0.1,
+        sentient: 0.0,
+        quantum: 0.0,
+        text: "Remember, you may sometimes\nfind that you cannot\ncomplete a delivery.\n \nWorry not, The Tube is\nequipped with a\ntemporal manipulator\nthat will automatically\ntrigger when needed!"
+    },
+    {
+        grid_size_x: 6,
+        grid_size_y: 6,
+        time: 20,
+        general: 0.5,
+        normal: 0.7,
+        floating: 0.2,
+        sinking: 0.1,
+        sentient: 0.0,
+        quantum: 0.0,
+        text: ""
+    },
+    {
+        grid_size_x: 6,
+        grid_size_y: 6,
+        time: 20,
+        general: 0.5,
+        normal: 0.6,
+        floating: 0.2,
+        sinking: 0.1,
+        sentient: 0.0,
+        quantum: 0.1,
+        text: ""
+    },
+    {
+        grid_size_x: 6,
+        grid_size_y: 6,
+        time: 20,
+        general: 0.5,
+        normal: 0.5,
+        floating: 0.2,
+        sinking: 0.1,
+        sentient: 0.0,
+        quantum: 0.2,
+        text: ""
+    },
+    {
+        grid_size_x: 8,
+        grid_size_y: 8,
+        time: 30,
+        general: 0.5,
+        normal: 0.4,
+        floating: 0.2,
+        sinking: 0.2,
+        sentient: 0.2,
+        quantum: 0.0,
+        text: "Management has let me know\nthat there has been an influx\nof packages, so I've given\nyou access to all\nThe Tube.\n \n use it with care."
     }
 ];
 
