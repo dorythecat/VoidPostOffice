@@ -142,7 +142,7 @@ const levelSettings = [
         sinking: 0.2,
         sentient: 0.2,
         quantum: 0.0,
-        text: "Management has let me know\nthat there has been an influx\nof packages, so I've given\nyou access to all\nThe Tube.\n \n use it with care."
+        text: "Management has let me know\nthat there has been an influx\nof packages, so I've given\nyou access to all\nof The Tube.\n \n use it with care."
     }
 ];
 
