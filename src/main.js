@@ -109,8 +109,10 @@ function generateLevel(app, level, timerText, levelText, background) {
             placeholder_grid_element.width = background.width / (currentLevelSettings.grid_size_x + 2);
             placeholder_grid_element.height = background.height / (currentLevelSettings.grid_size_y + 2);
             placeholder_grid_element.anchor.set(0.5);
-            placeholder_grid_element.position.set(grid_offset_x + i * (background.width / (currentLevelSettings.grid_size_x + 2) + grid_spacing_x),
-                grid_offset_y + j * (background.height / (currentLevelSettings.grid_size_y + 2) + grid_spacing_y));
+            placeholder_grid_element.position.set(
+                grid_offset_x + i * (background.width / (currentLevelSettings.grid_size_x + 2) + grid_spacing_x),
+                grid_offset_y + j * (background.height / (currentLevelSettings.grid_size_y + 2) + grid_spacing_y)
+            );
             app.stage.addChild(placeholder_grid_element);
 
             grid_elements.push(placeholder_grid_element);
