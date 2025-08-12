@@ -380,17 +380,13 @@ function generateLevel(app, level, timerText, background) {
             if (won) {
                 if (currentLevel < levelSettings.length - 1) {
                     currentLevel++;
-                    setTimeout(() => {
-                        generateLevel(app, currentLevel, timerText, background);
-                    }, 1500);
-                } else {
-                    alert("Congratulations! You've completed all levels!");
-                }
+                    setTimeout(() => generateLevel(app, currentLevel, timerText, background), 1500);
+                } else alert("Congratulations! You've completed all levels!");
             } else {
                 alert("You lost! Try again.");
-                setTimeout(() => {
-                    generateLevel(app, currentLevel, timerText, background);
-                }, 1500);
+                // Reset to the start
+                currentLevel = 0;
+                setTimeout(() => generateLevel(app, currentLevel, timerText, background), 1500);
             }
         }
         timer -= delta.deltaMS / 1000;
