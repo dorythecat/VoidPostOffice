@@ -39,9 +39,9 @@ const levelSettings = [
         grid_size_y: 6,
         time: 20,
         general: 0.7,
-        normal: 0.7,
+        normal: 0.6,
         floating: 0.2,
-        sinking: 0.1,
+        sinking: 0.2,
         lonely: 0.0,
         quantum: 0.0
     }
@@ -167,12 +167,13 @@ function generateLevel(app, level, timerText, background) {
     for (let i = 1; i < currentLevelSettings.grid_size_x + 1; i++) {
         for (let j = 1; j < currentLevelSettings.grid_size_y + 1; j++) {
             if (Math.random() > currentLevelSettings.general) continue;
-            let boxType = "";
-            if (Math.random() < currentLevelSettings.normal) boxType = "normal";
-            else if (Math.random() < currentLevelSettings.floating) boxType = "floating";
-            else if (Math.random() < currentLevelSettings.sinking) boxType = "sinking";
-            else if (Math.random() < currentLevelSettings.lonely) boxType = "lonely";
-            else if (Math.random() < currentLevelSettings.quantum) boxType = "quantum";
+            let boxType = "normal";
+            let random = Math.random();
+            if (random < currentLevelSettings.normal) boxType = "normal";
+            else if (random < currentLevelSettings.normal + currentLevelSettings.floating) boxType = "floating";
+            else if (random < currentLevelSettings.normal + currentLevelSettings.floating + currentLevelSettings.lonely) boxType = "lonely";
+            else if (random < currentLevelSettings.normal + currentLevelSettings.floating + currentLevelSettings.lonely + currentLevelSettings.sinking) boxType = "sinking";
+            else if (random < currentLevelSettings.normal + currentLevelSettings.floating + currentLevelSettings.lonely + currentLevelSettings.sinking + currentLevelSettings.quantum) boxType = "quantum";
             addBox(grid_offset_x + i * (background.width / (currentLevelSettings.grid_size_x + 2) + grid_spacing_x),
                 grid_offset_y + j * (background.height / (currentLevelSettings.grid_size_y + 2) + grid_spacing_y),
                 boxType);
