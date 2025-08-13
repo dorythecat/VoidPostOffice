@@ -1,4 +1,4 @@
-import { Application, Assets, Sprite, Texture, BitmapText } from "pixi.js";
+import {Application, Assets, Sprite, Texture, BitmapText, ParticleContainer, Particle} from "pixi.js";
 import { GlowFilter } from "pixi-filters";
 
 // --- GLOBAL VARIABLES ---
@@ -488,47 +488,68 @@ function generateLevel(app, level, timerText, levelText, background) {
     await app.init({ background: "#111111", resizeTo: window });
     document.getElementById("pixi-container").appendChild(app.canvas);
 
+    // Star creation
+    const starContainer = new ParticleContainer();
+    const starSpeedX = Math.random() * 2 - 1;
+    const starSpeedY = Math.random() * 2 - 1;
+    const speedFactor = Math.random() * 100;
     function createStar(x, y, size, color) {
-        const star = new Sprite(starTexture);
+        const star = new Particle(starTexture);
         star.tint = color;
-        if (size < 1) size = 1;
-        star.width = size;
-        star.height = size;
-        star.anchor.set(0.5);
-        star.position.set(x, y);
+        star.scaleX = star.scaleY = size;
+        star.x = x;
+        star.y = y;
         star.alpha = Math.random();
         if (star.alpha < 0.5) star.alpha = 0.5;
         star.filters = [
             new GlowFilter({ distance: 15, outerStrength: 2, color: star.tint })
         ]
-        stars.push(star);
-        app.stage.addChild(star);
-    }
 
-    for (let i = 0; i < 500; i++) {
-        createStar(Math.random() * app.screen.width,
-            Math.random() * app.screen.height,
-            Math.random() * 10,
-            Math.random() * 0xffffff);
-    }
-
-    // Star movement
-    const starSpeedX = Math.random() * 2 - 1;
-    const starSpeedY = Math.random() * 2 - 1;
-    const speedFactor = Math.random() * 100;
-    app.ticker.add((delta) => {
-        for (let star of stars) {
-            star.position.x += starSpeedX * delta.deltaMS / speedFactor;
-            star.position.y += starSpeedY * delta.deltaMS / speedFactor;
+        // Star movement
+        app.ticker.add((delta) => {
+            star.x += starSpeedX * delta.deltaMS / speedFactor;
+            star.y += starSpeedY * delta.deltaMS / speedFactor;
             if (Math.random() < 0.01) star.alpha = Math.random();
             if (star.alpha < 0.5) star.alpha = 0.5;
 
-            if (star.position.x < -star.width) star.position.x = app.screen.width;
-            else if (star.position.x > app.screen.width) star.position.x = -star.width;
-            if (star.position.y < -star.height) star.position.y = app.screen.height;
-            else if (star.position.y > app.screen.height) star.position.y = -star.height;
-        }
-    });
+            if (star.x < 0) {
+                star.x = app.screen.width;
+                star.y = Math.random() * app.screen.height;
+                star.alpha = Math.random();
+                star.tint = Math.random() * 0xffffff;
+            }
+            else if (star.x > app.screen.width) {
+                star.x = 0;
+                star.y = Math.random() * app.screen.height;
+                star.alpha = Math.random();
+                star.tint = Math.random() * 0xffffff;
+            }
+            if (star.y < 0) {
+                star.x = Math.random() * app.screen.width;
+                star.y = app.screen.height;
+                star.alpha = Math.random();
+                star.tint = Math.random() * 0xffffff;
+            }
+            else if (star.y > app.screen.height) {
+                star.x = Math.random() * app.screen.width;
+                star.y = 0;
+                star.alpha = Math.random();
+                star.tint = Math.random() * 0xffffff;
+            }
+        })
+
+        stars.push(star);
+        starContainer.addParticle(star);
+    }
+
+    for (let i = 0; i < 1000; i++) {
+        createStar(Math.random() * app.screen.width,
+            Math.random() * app.screen.height,
+            Math.random(),
+            Math.random() * 0xffffff);
+    }
+
+    app.stage.addChild(starContainer);
 
     // Timer text
     const timerText = new BitmapText({
