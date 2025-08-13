@@ -1,5 +1,6 @@
 import {Application, Assets, Sprite, Texture, BitmapText, ParticleContainer, Particle} from "pixi.js";
 import { GlowFilter } from "pixi-filters";
+import { Sound } from "@pixi/sound";
 
 // --- GLOBAL VARIABLES ---
 const grid_spacing_x = 10;
@@ -143,6 +144,10 @@ const boxTexture = await Assets.load("/assets/boxes/box_1.png");
 
 // Load fonts
 await Assets.load('/assets/fonts/alagard.ttf');
+
+// Load sounds
+const lvl_finished_sfx = Sound.from('/assets/sound/lvl_finished.wav');
+const music = Sound.from('/assets/sound/music.wav');
 
 // --- LEVEL GENERATION ---
 function generateLevel(app, level, timerText, levelText, background) {
@@ -477,6 +482,7 @@ function generateLevel(app, level, timerText, levelText, background) {
             return;
         }
         currentLevel++;
+        lvl_finished_sfx.play();
         setTimeout(() => generateLevel(app, currentLevel, timerText, levelText, background), 1500);
     };
 
@@ -644,4 +650,10 @@ function generateLevel(app, level, timerText, levelText, background) {
     // Make app interactive
     app.stage.eventMode = 'static';
     app.stage.hitArea = app.screen;
+
+    // Play music
+    music.play({
+        loop: true,
+        volume: 0.5
+    });
 })();
