@@ -181,7 +181,7 @@ function generateLevel(app, level, timerText, levelText, background) {
         }
     }
 
-    // Make app interactive again
+    // Make the app interactive again
     app.stage.eventMode = 'static';
     app.stage.hitArea = app.screen;
     app.stage.on('pointerup', onDragEnd);
