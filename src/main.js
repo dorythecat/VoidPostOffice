@@ -128,7 +128,7 @@ const levelSettings = [
         grid_size_y: 8,
         time: 30,
         general: 0.5,
-        normal: 0.4,
+        normal: 0.5,
         floating: 0.2,
         sinking: 0.2,
         sentient: 0.2,
