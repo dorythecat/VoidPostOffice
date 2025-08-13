@@ -472,7 +472,7 @@ function generateLevel(app, level, timerText, levelText, background) {
         }
 
         if (!won) {
-            alert("Packages couldn't be delivering. Starting temporal manipulator...");
+            alert("Packages couldn't be delivered. Starting temporal manipulation protocol...");
             // Reset this level
             setTimeout(() => generateLevel(app, currentLevel, timerText, levelText, background), 1500);
             return;
