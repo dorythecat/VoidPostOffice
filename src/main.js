@@ -406,6 +406,7 @@ function generateLevel(app, level, timerText, levelText, background) {
 
         // Delivery time!
         app.ticker.remove(gameLoop);
+        app.ticker.stop();
         app.stage.eventMode = 'none';
 
         let won = true;
@@ -480,6 +481,7 @@ function generateLevel(app, level, timerText, levelText, background) {
     };
 
     app.ticker.add(gameLoop);
+    app.ticker.start();
 }
 
 // --- PIXIJS APP ---
