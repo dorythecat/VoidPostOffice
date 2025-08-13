@@ -348,7 +348,10 @@ function generateLevel(app, level, timerText, levelText, background) {
         for (let [box, box_data] of sinkingBoxes) {
             if (box === dragTarget) continue;
 
-            if (box.position.y >= window.innerHeight - grid_offset_y - box.height) continue;
+            if (box.position.y >= window.innerHeight - grid_offset_y - box.height) {
+                box_data.y = box.position.y;
+                continue;
+            }
 
             const originalY = box.position.y;
             box.position.y += delta.deltaMS / 100;
