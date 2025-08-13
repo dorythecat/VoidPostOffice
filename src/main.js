@@ -398,7 +398,7 @@ function generateLevel(app, level, timerText, levelText, background) {
             app.stage.setChildIndex(randomBox[0], app.stage.children.length - 1);
         }
 
-        if (timer > 0) {
+        if (timer > 0.1) {
             timer -= delta.deltaMS / 1000;
             timerText.text = "00:" + (timer < 10 ? "0" : "") + Math.floor(timer);
             return;
