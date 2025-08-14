@@ -134,6 +134,160 @@ const levelSettings = [
         sentient: 0.2,
         quantum: 0.0,
         text: "Management has let me know\nthat there has been an influx\nof packages, so I've given\nyou access to all\nof The Tube.\n \n use it with care."
+    }, {
+        grid_size_x: 8,
+        grid_size_y: 8,
+        time: 30,
+        general: 0.5,
+        normal: 0.5,
+        floating: 0.2,
+        sinking: 0.2,
+        sentient: 0.1,
+        quantum: 0.1,
+        text: ""
+    }, {
+        grid_size_x: 8,
+        grid_size_y: 8,
+        time: 30,
+        general: 0.5,
+        normal: 0.5,
+        floating: 0.2,
+        sinking: 0.1,
+        sentient: 0.0,
+        quantum: 0.2,
+        text: ""
+    }, {
+        grid_size_x: 8,
+        grid_size_y: 8,
+        time: 30,
+        general: 0.5,
+        normal: 0.4,
+        floating: 0.2,
+        sinking: 0.1,
+        sentient: 0.1,
+        quantum: 0.2,
+        text: ""
+    }, {
+        grid_size_x: 8,
+        grid_size_y: 8,
+        time: 30,
+        general: 0.5,
+        normal: 0.3,
+        floating: 0.2,
+        sinking: 0.1,
+        sentient: 0.2,
+        quantum: 0.2,
+        text: ""
+    }, {
+        grid_size_x: 8,
+        grid_size_y: 8,
+        time: 30,
+        general: 0.5,
+        normal: 0.2,
+        floating: 0.2,
+        sinking: 0.2,
+        sentient: 0.2,
+        quantum: 0.2,
+        text: ""
+    }, {
+        grid_size_x: 8,
+        grid_size_y: 8,
+        time: 30,
+        general: 0.7,
+        normal: 0.2,
+        floating: 0.2,
+        sinking: 0.2,
+        sentient: 0.2,
+        quantum: 0.2,
+        text: "We have noticed an influx of packets.\nBe careful, you may not be able to\ncomplete all of these deliveries."
+    }, {
+        grid_size_x: 8,
+        grid_size_y: 8,
+        time: 30,
+        general: 0.7,
+        normal: 0.2,
+        floating: 0.2,
+        sinking: 0.2,
+        sentient: 0.2,
+        quantum: 0.2,
+        text: ""
+    }, {
+        grid_size_x: 8,
+        grid_size_y: 8,
+        time: 30,
+        general: 0.7,
+        normal: 0.2,
+        floating: 0.2,
+        sinking: 0.2,
+        sentient: 0.2,
+        quantum: 0.2,
+        text: ""
+    }, {
+        grid_size_x: 8,
+        grid_size_y: 8,
+        time: 30,
+        general: 0.7,
+        normal: 0.1,
+        floating: 0.3,
+        sinking: 0.2,
+        sentient: 0.2,
+        quantum: 0.2,
+        text: ""
+    }, {
+        grid_size_x: 8,
+        grid_size_y: 8,
+        time: 30,
+        general: 0.7,
+        normal: 0.0,
+        floating: 0.3,
+        sinking: 0.3,
+        sentient: 0.2,
+        quantum: 0.2,
+        text: ""
+    }, {
+        grid_size_x: 8,
+        grid_size_y: 8,
+        time: 30,
+        general: 0.7,
+        normal: 0.0,
+        floating: 0.2,
+        sinking: 0.3,
+        sentient: 0.3,
+        quantum: 0.2,
+        text: ""
+    }, {
+        grid_size_x: 8,
+        grid_size_y: 8,
+        time: 30,
+        general: 0.7,
+        normal: 0.0,
+        floating: 0.2,
+        sinking: 0.2,
+        sentient: 0.3,
+        quantum: 0.3,
+        text: ""
+    }, {
+        grid_size_x: 8,
+        grid_size_y: 8,
+        time: 60,
+        general: 0.5,
+        normal: 0.0,
+        floating: 0.0,
+        sinking: 0.0,
+        sentient: 0.0,
+        quantum: 1.0,
+        text: "There seems to have been a small\ninflux of quantum packages.\n \nThe Tube is backed up,\nplease ensure they are ready\nto be delivered."
+    }, {
+        grid_size_x: 8,
+        grid_size_y: 8,
+        time: 120,
+        general: 0.9,
+        normal: 0.0,
+        floating: 0.0,
+        sinking: 0.0,
+        sentient: 0.0,
+        quantum: 1.0,
+        text: "WHERE DID THEY COME FROM-"
     }
 ];
 
@@ -202,7 +356,7 @@ function generateLevel(app, level, timerText, levelText, background) {
     }
 
     function onDragMove(event) {
-        if (!dragTarget) return; // Nothing to do
+        if (!dragTarget || !dragTarget.parent) return; // Nothing to do
 
         dragTarget.parent.toLocal(event.global, null, dragTarget.position);
         let x = window.innerWidth / 2 - background.getBounds().width / 2 + background.width / (2 * currentLevelSettings.grid_size_x + 4);
