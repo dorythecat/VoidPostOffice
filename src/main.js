@@ -1,4 +1,4 @@
-import {Application, Assets, Sprite, Texture, BitmapText, ParticleContainer, Particle} from "pixi.js";
+import { Application, Assets, Sprite, Texture, BitmapText, ParticleContainer, Particle } from "pixi.js";
 import { GlowFilter } from "pixi-filters";
 import { Sound } from "@pixi/sound";
 
